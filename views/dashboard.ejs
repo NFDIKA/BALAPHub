@@ -77,6 +77,157 @@
             </button>
         </div>
 
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-10">
+    
+    <% if (user.role !== 'Mitra') { %>
+        <div class="bg-white p-7 rounded-[40px] border border-slate-100 shadow-sm flex flex-col">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="p-2 bg-amber-50 rounded-xl text-amber-500"><i data-lucide="award" class="w-5 h-5"></i></div>
+                <h3 class="text-[11px] font-black uppercase tracking-widest text-slate-800 italic">Peringkat Mitra</h3>
+            </div>
+            <div class="space-y-4 overflow-y-auto custom-scrollbar pr-1">
+                <% rankingMitra.slice(0, 5).forEach((m, i) => { %>
+                    <div class="p-4 bg-slate-50 rounded-3xl border border-transparent hover:border-amber-200 transition-all mb-1">
+                        <div class="flex justify-between items-start mb-2">
+                            <div class="flex items-center gap-2">
+                                <span class="text-[10px] font-black <%= i === 0 ? 'text-amber-500' : 'text-slate-300' %>">#<%= i+1 %></span>
+                                <p class="text-[10px] font-black text-slate-800 uppercase tracking-tight"><%= m.name %></p>
+                            </div>
+                            <span class="text-[10px] font-black text-blue-600">Rp <%= m.totalNilai.toLocaleString('id-ID') %></span>
+                        </div>
+                        
+                        <div class="grid grid-cols-3 gap-1 mb-2 border-b border-slate-200 pb-2">
+                            <div class="text-[7px] font-bold text-blue-500 text-center uppercase">PSB: Rp <%= m.nilaiPsb.toLocaleString('id-ID') %></div>
+                            <div class="text-[7px] font-bold text-orange-500 text-center uppercase">CM: Rp <%= m.nilaiCm.toLocaleString('id-ID') %></div>
+                            <div class="text-[7px] font-bold text-purple-500 text-center uppercase">PM: Rp <%= m.nilaiPm.toLocaleString('id-ID') %></div>
+                        </div>
+
+                        <div class="grid grid-cols-4 gap-1 text-center">
+                            <div><p class="text-[7px] font-bold text-slate-400 uppercase">Total</p><p class="text-[9px] font-black text-slate-700"><%= m.count %></p></div>
+                            <div><p class="text-[7px] font-bold text-slate-400 uppercase">PSB</p><p class="text-[9px] font-black text-blue-500"><%= m.psb %></p></div>
+                            <div><p class="text-[7px] font-bold text-slate-400 uppercase">CM</p><p class="text-[9px] font-black text-orange-500"><%= m.cm %></p></div>
+                            <div><p class="text-[7px] font-bold text-slate-400 uppercase">PM</p><p class="text-[9px] font-black text-purple-500"><%= m.pm %></p></div>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        </div>
+
+        <div class="bg-white p-7 rounded-[40px] border border-slate-100 shadow-sm flex flex-col">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="p-2 bg-blue-50 rounded-xl text-blue-500"><i data-lucide="map-pin" class="w-5 h-5"></i></div>
+                <h3 class="text-[11px] font-black uppercase tracking-widest text-slate-800 italic">Top Cluster</h3>
+            </div>
+            <div class="space-y-4 overflow-y-auto custom-scrollbar pr-1">
+                <% rankingCluster.slice(0, 5).forEach((c, i) => { %>
+                    <div class="p-4 bg-slate-50 rounded-3xl border border-transparent hover:border-blue-200 transition-all mb-1">
+                        <div class="flex justify-between items-start mb-2">
+                            <p class="text-[10px] font-black text-slate-800 uppercase tracking-tight text-left"><%= c.name %></p>
+                            <span class="text-[10px] font-black text-blue-600">Rp <%= c.totalNilai.toLocaleString('id-ID') %></span>
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-1 mb-2 border-b border-slate-200 pb-2">
+                            <div class="text-[7px] font-bold text-blue-500 text-center uppercase">PSB: Rp <%= c.nilaiPsb.toLocaleString('id-ID') %></div>
+                            <div class="text-[7px] font-bold text-orange-500 text-center uppercase">CM: Rp <%= c.nilaiCm.toLocaleString('id-ID') %></div>
+                            <div class="text-[7px] font-bold text-purple-500 text-center uppercase">PM: Rp <%= c.nilaiPm.toLocaleString('id-ID') %></div>
+                        </div>
+
+                        <div class="grid grid-cols-4 gap-1 text-center">
+                            <div><p class="text-[7px] font-bold text-slate-400 uppercase">Total</p><p class="text-[9px] font-black text-slate-700"><%= c.count %></p></div>
+                            <div><p class="text-[7px] font-bold text-slate-400 uppercase">PSB</p><p class="text-[9px] font-black text-blue-500"><%= c.psb %></p></div>
+                            <div><p class="text-[7px] font-bold text-slate-400 uppercase">CM</p><p class="text-[9px] font-black text-orange-500"><%= c.cm %></p></div>
+                            <div><p class="text-[7px] font-bold text-slate-400 uppercase">PM</p><p class="text-[9px] font-black text-purple-500"><%= c.pm %></p></div>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        </div>
+
+        <div class="bg-white p-7 rounded-[40px] border border-slate-100 shadow-sm flex flex-col">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="p-2 bg-emerald-50 rounded-xl text-emerald-500"><i data-lucide="pie-chart" class="w-5 h-5"></i></div>
+                <h3 class="text-[11px] font-black uppercase tracking-widest text-slate-800 italic">Kontribusi Area</h3>
+            </div>
+            <div class="space-y-4 overflow-y-auto custom-scrollbar pr-1">
+                <% rankingArea.forEach(a => { %>
+                    <div class="p-4 bg-slate-50 rounded-3xl border border-slate-100 mb-4 transition-all hover:border-emerald-200">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-[10px] font-black text-slate-800 uppercase tracking-tight"><%= a.name %></span>
+                            <span class="text-[10px] font-black text-emerald-600">Rp <%= a.totalNilai.toLocaleString('id-ID') %></span>
+                        </div>
+                        
+                        <div class="grid grid-cols-3 gap-1 mb-2 border-b border-slate-200 pb-2">
+                            <div class="text-[7px] font-bold text-blue-500 text-center uppercase">PSB: Rp <%= a.nilaiPsb.toLocaleString('id-ID') %></div>
+                            <div class="text-[7px] font-bold text-orange-500 text-center uppercase">CM: Rp <%= a.nilaiCm.toLocaleString('id-ID') %></div>
+                            <div class="text-[7px] font-bold text-purple-500 text-center uppercase">PM: Rp <%= a.nilaiPm.toLocaleString('id-ID') %></div>
+                        </div>
+
+                        <div class="grid grid-cols-4 gap-1 text-center">
+                            <div><p class="text-[7px] font-bold text-slate-400 uppercase">Total</p><p class="text-[9px] font-black text-slate-700"><%= a.count %></p></div>
+                            <div><p class="text-[7px] font-bold text-slate-400 uppercase">PSB</p><p class="text-[9px] font-black text-blue-500"><%= a.psb %></p></div>
+                            <div><p class="text-[7px] font-bold text-slate-400 uppercase">CM</p><p class="text-[9px] font-black text-orange-500"><%= a.cm %></p></div>
+                            <div><p class="text-[7px] font-bold text-slate-400 uppercase">PM</p><p class="text-[9px] font-black text-purple-500"><%= a.pm %></p></div>
+                        </div>
+                    </div>
+                <% }) %>
+
+                <div class="p-4 bg-blue-600 rounded-3xl shadow-xl shadow-blue-100 mt-2">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="text-[10px] font-black text-white uppercase tracking-tight italic">KAA (TOTAL GABUNGAN)</span>
+                        <span class="text-[10px] font-black text-blue-100">Rp <%= totalKaa.totalNilai.toLocaleString('id-ID') %></span>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-1 mb-2 border-b border-blue-400/30 pb-2">
+                        <div class="text-[7px] font-bold text-blue-100 text-center uppercase">PSB: Rp <%= totalKaa.nilaiPsb.toLocaleString('id-ID') %></div>
+                        <div class="text-[7px] font-bold text-orange-100 text-center uppercase">CM: Rp <%= totalKaa.nilaiCm.toLocaleString('id-ID') %></div>
+                        <div class="text-[7px] font-bold text-purple-100 text-center uppercase">PM: Rp <%= totalKaa.nilaiPm.toLocaleString('id-ID') %></div>
+                    </div>
+
+                    <div class="grid grid-cols-4 gap-1 text-center">
+                        <div><p class="text-[7px] font-bold text-blue-200 uppercase">Total</p><p class="text-[9px] font-black text-white"><%= totalKaa.count %></p></div>
+                        <div><p class="text-[7px] font-bold text-blue-200 uppercase">PSB</p><p class="text-[9px] font-black text-white"><%= totalKaa.psb %></p></div>
+                        <div><p class="text-[7px] font-bold text-blue-200 uppercase">CM</p><p class="text-[9px] font-black text-white"><%= totalKaa.cm %></p></div>
+                        <div><p class="text-[7px] font-bold text-blue-200 uppercase">PM</p><p class="text-[9px] font-black text-white"><%= totalKaa.pm %></p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <% } else { %>
+        <div class="xl:col-span-3 bg-white p-8 rounded-[40px] border border-slate-100 shadow-sm">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="flex items-center gap-6">
+                    <div class="w-16 h-16 bg-blue-50 rounded-3xl flex items-center justify-center text-blue-600 shadow-inner">
+                        <i data-lucide="briefcase" class="w-8 h-8"></i>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Performa Perusahaan</p>
+                        <h3 class="text-xl font-black text-slate-800 uppercase italic"><%= mitraSelfStats.name %></h3>
+                    </div>
+                </div>
+                
+                <div class="flex flex-wrap gap-4 justify-center md:justify-end">
+                    <div class="text-center p-4 bg-blue-50 rounded-2xl min-w-[140px] border border-blue-100">
+                        <p class="text-[8px] font-black text-blue-400 uppercase mb-1">TOTAL PSB</p>
+                        <p class="text-sm font-black text-blue-600">Rp <%= mitraSelfStats.nilaiPsb.toLocaleString('id-ID') %></p>
+                        <p class="text-[9px] font-bold text-blue-300 mt-1 uppercase"><%= mitraSelfStats.psb %> UNIT</p>
+                    </div>
+                    <div class="text-center p-4 bg-orange-50 rounded-2xl min-w-[140px] border border-orange-100">
+                        <p class="text-[8px] font-black text-orange-400 uppercase mb-1">TOTAL CM</p>
+                        <p class="text-sm font-black text-orange-600">Rp <%= mitraSelfStats.nilaiCm.toLocaleString('id-ID') %></p>
+                        <p class="text-[9px] font-bold text-orange-300 mt-1 uppercase"><%= mitraSelfStats.cm %> UNIT</p>
+                    </div>
+                    <div class="text-center p-4 bg-purple-50 rounded-2xl min-w-[140px] border border-purple-100">
+                        <p class="text-[8px] font-black text-purple-400 uppercase mb-1">TOTAL PM</p>
+                        <p class="text-sm font-black text-purple-600">Rp <%= mitraSelfStats.nilaiPm.toLocaleString('id-ID') %></p>
+                        <p class="text-[9px] font-bold text-purple-300 mt-1 uppercase"><%= mitraSelfStats.pm %> UNIT</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <% } %>
+</div>
+
         <div class="bg-white rounded-[40px] border border-slate-200 shadow-xl overflow-hidden">
             <div class="p-6 md:p-8 flex flex-col md:flex-row justify-between items-center gap-4 border-b border-slate-50">
                 <div class="flex items-center gap-2">
@@ -670,7 +821,7 @@ function openDetail(item) {
         </div>
     `).join('') || '<p class="text-xs text-slate-400 italic">Belum ada catatan.</p>';
 
-    // 4. Logic Tampilan Action Area
+    // 4. Logic Tampilan Action Area (DIPERBAIKI UNTUK APPROVAL BERJENJANG)
     const actionArea = document.getElementById('actionArea');
     const mitraReuploadArea = document.getElementById('mitraReuploadArea');
     const leadOption = document.getElementById('leadOption');
@@ -682,10 +833,17 @@ function openDetail(item) {
     mitraReuploadArea.classList.add('hidden');
     leadOption.classList.add('hidden');
 
+    // Cek apakah sekarang giliran role tersebut
+    const isGilirannya = 
+        (userRole === 'Teknisi' && item.status === 'WAITING_TEKNISI') ||
+        (userRole === 'Engineer' && item.status === 'WAITING_ENGINEER') ||
+        (userRole === 'Lead' && item.status === 'WAITING_LEAD') ||
+        (userRole === 'Head' && item.status === 'WAITING_HEAD');
+
     if (item.status === 'REJECTED' && userRole === 'Mitra') {
         mitraReuploadArea.classList.remove('hidden');
         reuploadForm.action = `/reupload/${item.id}`;
-    } else if (item.status !== 'COMPLETED' && item.status !== 'REJECTED' && userRole !== 'Mitra' && userRole !== 'SuperAdmin') {
+    } else if (isGilirannya) { // HANYA TAMPIL JIKA SESUAI URUTAN ROLE
         actionArea.classList.remove('hidden');
         approvalForm.action = `/approve/${item.id}`;
         
@@ -730,8 +888,6 @@ function openDetail(item) {
     toggleModal('modalProcess');
     setTimeout(() => lucide.createIcons(), 10);
 }
-
-
 
 function searchTable() {
         const val = document.getElementById("searchInput").value.toUpperCase();

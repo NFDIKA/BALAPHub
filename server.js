@@ -159,33 +159,153 @@ app.get("/dashboard", (req, res) => {
   const allUsers = readUsers();
   const user = req.session.user;
 
-  let filteredData = allData;
+  // Inisialisasi variabel untuk EJS
+  let rankingMitra = [];
+  let rankingCluster = [];
+  let rankingArea = [];
+  let mitraSelfStats = null;
+  let totalKaa = {
+    totalNilai: 0,
+    count: 0,
+    psb: 0,
+    cm: 0,
+    pm: 0,
+    nilaiPsb: 0,
+    nilaiCm: 0,
+    nilaiPm: 0,
+  };
 
-  // Filter untuk Mitra (Berdasarkan Nama Mitra DAN Wilayah Tugasnya)
+  // --- 1. LOGIKA FILTER DATA EKSISTING (SINKRON) ---
+  let filteredData = allData;
   if (user.role === "Mitra") {
     filteredData = allData.filter((d) => {
-      const isMyMitra = d.mitraName === user.mitraName;
+      const isMyMitra =
+        d.mitraName === user.name || d.mitraName === user.mitraName;
       const projectLoc = `${d.area}|${d.cluster}`;
       const hasAccess = user.clusters && user.clusters.includes(projectLoc);
       return isMyMitra && hasAccess;
     });
-  }
-  // Filter untuk Internal (Teknisi, Engineer, Lead)
-  else if (["Teknisi", "Engineer", "Lead"].includes(user.role)) {
+  } else if (["Teknisi", "Engineer", "Lead"].includes(user.role)) {
     filteredData = allData.filter((d) => {
       const projectLoc = `${d.area}|${d.cluster}`;
       return user.clusters && user.clusters.includes(projectLoc);
     });
   }
-  // Head & SuperAdmin tetap melihat semua data
+
+  // --- 2. LOGIKA PERHITUNGAN STATISTIK (DENGAN NILAI RUPIAH PER KATEGORI) ---
+  if (user.role === "Mitra") {
+    mitraSelfStats = {
+      name: user.name,
+      totalNilai: filteredData.reduce(
+        (acc, curr) => acc + (Number(curr.nilai) || 0),
+        0,
+      ),
+      count: filteredData.length,
+      // Jumlah Unit (Disesuaikan agar sinkron dengan pemanggilan di EJS)
+      psb: filteredData.filter((i) =>
+        (i.jenisBalap || "").toUpperCase().includes("PSB"),
+      ).length,
+      cm: filteredData.filter((i) =>
+        (i.jenisBalap || "").toUpperCase().includes("CM"),
+      ).length,
+      pm: filteredData.filter((i) =>
+        (i.jenisBalap || "").toUpperCase().includes("PM"),
+      ).length,
+      // Total Nilai Rupiah per Kategori
+      nilaiPsb: filteredData
+        .filter((i) => (i.jenisBalap || "").toUpperCase().includes("PSB"))
+        .reduce((acc, curr) => acc + (Number(curr.nilai) || 0), 0),
+      nilaiCm: filteredData
+        .filter((i) => (i.jenisBalap || "").toUpperCase().includes("CM"))
+        .reduce((acc, curr) => acc + (Number(curr.nilai) || 0), 0),
+      nilaiPm: filteredData
+        .filter((i) => (i.jenisBalap || "").toUpperCase().includes("PM"))
+        .reduce((acc, curr) => acc + (Number(curr.nilai) || 0), 0),
+    };
+  } else {
+    const statsMitra = {};
+    const statsCluster = {};
+    const statsArea = {};
+
+    allData.forEach((item) => {
+      const nilai = Number(item.nilai) || 0;
+      const mName = item.mitraName || "INTERNAL";
+      const cName = item.cluster || "Unknown";
+      const aName = item.area || "Unknown";
+      const jenis = (item.jenisBalap || "").toUpperCase();
+
+      const initStats = (obj, key) => {
+        if (!obj[key])
+          obj[key] = {
+            name: key,
+            totalNilai: 0,
+            count: 0,
+            psb: 0,
+            cm: 0,
+            pm: 0,
+            nilaiPsb: 0,
+            nilaiCm: 0,
+            nilaiPm: 0,
+          };
+      };
+
+      [
+        [statsMitra, mName],
+        [statsCluster, cName],
+        [statsArea, aName],
+      ].forEach(([obj, key]) => {
+        initStats(obj, key);
+        obj[key].totalNilai += nilai;
+        obj[key].count += 1;
+        if (jenis.includes("PSB")) {
+          obj[key].psb += 1;
+          obj[key].nilaiPsb += nilai;
+        } else if (jenis.includes("CM")) {
+          obj[key].cm += 1;
+          obj[key].nilaiCm += nilai;
+        } else if (jenis.includes("PM")) {
+          obj[key].pm += 1;
+          obj[key].nilaiPm += nilai;
+        }
+      });
+
+      // Hitung Akumulasi KAA
+      totalKaa.totalNilai += nilai;
+      totalKaa.count += 1;
+      if (jenis.includes("PSB")) {
+        totalKaa.psb += 1;
+        totalKaa.nilaiPsb += nilai;
+      } else if (jenis.includes("CM")) {
+        totalKaa.cm += 1;
+        totalKaa.nilaiCm += nilai;
+      } else if (jenis.includes("PM")) {
+        totalKaa.pm += 1;
+        totalKaa.nilaiPm += nilai;
+      }
+    });
+
+    rankingMitra = Object.values(statsMitra).sort(
+      (a, b) => b.totalNilai - a.totalNilai,
+    );
+    rankingCluster = Object.values(statsCluster).sort(
+      (a, b) => b.totalNilai - a.totalNilai,
+    );
+    rankingArea = Object.values(statsArea).sort(
+      (a, b) => b.totalNilai - a.totalNilai,
+    );
+  }
 
   res.render("dashboard", {
-    user: user,
+    user,
     data: filteredData,
     users: allUsers,
+    rankingMitra,
+    rankingCluster,
+    rankingArea,
+    mitraSelfStats,
+    totalKaa,
   });
 });
-
 // Tambah User (DIPERBARUI: Menangani Multiple Clusters)
 app.post("/add-user", (req, res) => {
   if (req.session.user.role !== "SuperAdmin")
