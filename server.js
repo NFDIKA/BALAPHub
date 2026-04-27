@@ -18,8 +18,13 @@ app.use(
   session({
     secret: "balaphub-secret-key-2024",
     resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false },
+    saveUninitialized: false, // Diubah ke false untuk efisiensi session
+    cookie: {
+      secure: false, // Set true jika sudah pakai HTTPS
+      httpOnly: true, // Proteksi dari XSS
+      maxAge: 30 * 60 * 1000, // Timeout 30 menit
+    },
+    rolling: true, // Timer maxAge akan di-reset ke 30 menit lagi setiap user klik/refresh
   }),
 );
 

@@ -1076,6 +1076,37 @@ function validateFileSize(input) {
     }
 }
 
+let idleTimer;
+    // Waktu tunggu harus sama dengan maxAge di server (30 menit)
+    const timeoutDuration = 15 * 60 * 1000; 
+
+    function resetTimer() {
+        clearTimeout(idleTimer);
+        idleTimer = setTimeout(logoutUser, timeoutDuration);
+    }
+
+    function logoutUser() {
+        // Menggunakan SweetAlert2 yang sudah ada di dashboard Anda
+        Swal.fire({
+            title: 'Sesi Berakhir',
+            text: 'Demi keamanan, Anda telah dikeluarkan otomatis karena tidak ada aktivitas selama 30 menit.',
+            icon: 'warning',
+            confirmButtonColor: '#3b82f6',
+            confirmButtonText: 'Login Kembali'
+        }).then(() => {
+            window.location.href = '/logout';
+        });
+    }
+
+    // Pantau aktivitas user (gerak mouse, ketik, scroll)
+    const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'];
+    events.forEach(name => {
+        document.addEventListener(name, resetTimer, true);
+    });
+
+    // Mulai hitung mundur saat halaman dimuat
+    resetTimer();
+
 </script>
 
 </body>
