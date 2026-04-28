@@ -18,7 +18,6 @@
     </style>
 </head>
 <body class="bg-[#F1F5F9] text-slate-900">
-
     <nav class="sticky top-0 z-50 border-b border-white bg-white/70 backdrop-blur-xl px-4 md:px-8 py-4 flex justify-between items-center">
         <div class="flex items-center gap-3">
             <div class="bg-gradient-to-br from-blue-600 to-indigo-700 p-2.5 rounded-2xl text-white shadow-lg shadow-blue-200">
@@ -58,440 +57,644 @@
             <% } %>
         </div>
 
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <button onclick="filterStatus('ALL')" class="status-card bg-white p-6 rounded-[32px] border border-slate-200 shadow-sm text-left hover:border-blue-500 transition-all">
+                <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-10">
+            <% if (user.role !== 'Mitra') { %>
+                <div class="bg-white p-7 rounded-[40px] border border-slate-100 shadow-sm flex flex-col">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="p-2 bg-amber-50 rounded-xl text-amber-500"><i data-lucide="award" class="w-5 h-5"></i></div>
+                        <h3 class="text-[11px] font-black uppercase tracking-widest text-slate-800 italic">Peringkat Mitra</h3>
+                    </div>
+                    <div class="space-y-4 overflow-y-auto custom-scrollbar pr-1">
+                        <% rankingMitra.slice(0, 5).forEach((m, i) => { %>
+                            <div class="p-4 bg-slate-50 rounded-3xl border border-transparent hover:border-amber-200 transition-all mb-1">
+                                <div class="flex justify-between items-start mb-2">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-[10px] font-black <%= i === 0 ? 'text-amber-500' : 'text-slate-300' %>">#<%= i + 1 %></span>
+                                        <p class="text-[10px] font-black text-slate-800 uppercase tracking-tight"><%= m.name %></p>
+                                    </div>
+                                    <span class="text-[10px] font-black text-blue-600">Rp <%= m.totalNilai.toLocaleString('id-ID') %></span>
+                                </div>
+                                <div class="grid grid-cols-3 gap-1 mb-2 border-b border-slate-200 pb-2">
+                                    <div class="text-[7px] font-bold text-blue-500 text-center uppercase">PSB: Rp <%= m.nilaiPsb.toLocaleString('id-ID') %></div>
+                                    <div class="text-[7px] font-bold text-orange-500 text-center uppercase">CM: Rp <%= m.nilaiCm.toLocaleString('id-ID') %></div>
+                                    <div class="text-[7px] font-bold text-purple-500 text-center uppercase">PM: Rp <%= m.nilaiPm.toLocaleString('id-ID') %></div>
+                                    <div class="text-[7px] font-bold text-green-500 text-center uppercase">Mutasi: Rp <%= m.nilaiMutasi.toLocaleString('id-ID') %></div>
+                                    <div class="text-[7px] font-bold text-red-500 text-center uppercase">Dismantle: Rp <%= m.nilaiDismantle.toLocaleString('id-ID') %></div>
+                                </div>
+                                <div class="grid grid-cols-4 gap-1 text-center">
+                                    <div>
+                                        <p class="text-[7px] font-bold text-slate-400 uppercase">Total</p>
+                                        <p class="text-[9px] font-black text-slate-700"><%= m.count %></p>
+                                    </div>
+                                    <div>
+                                        <p class="text-[7px] font-bold text-slate-400 uppercase">PSB</p>
+                                        <p class="text-[9px] font-black text-blue-500"><%= m.psb %></p>
+                                    </div>
+                                    <div>
+                                        <p class="text-[7px] font-bold text-slate-400 uppercase">CM</p>
+                                        <p class="text-[9px] font-black text-orange-500"><%= m.cm %></p>
+                                    </div>
+                                    <div>
+                                        <p class="text-[7px] font-bold text-slate-400 uppercase">PM</p>
+                                        <p class="text-[9px] font-black text-purple-500"><%= m.pm %></p>
+                                    </div>
+                                    <div>
+                                        <p class="text-[7px] font-bold text-slate-400 uppercase">Mutasi</p>
+                                        <p class="text-[9px] font-black text-green-500"><%= m.mutasi %></p>
+                                    </div>
+                                    <div>
+                                        <p class="text-[7px] font-bold text-slate-400 uppercase">Dismantle</p>
+                                        <p class="text-[9px] font-black text-red-500"><%= m.dismantle %></p>
+                                    </div>
+                                </div>
+                            </div>
+                        <% }) %>
+                    </div>
+                </div>
+
+                <div class="bg-white p-7 rounded-[40px] border border-slate-100 shadow-sm flex flex-col">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="p-2 bg-blue-50 rounded-xl text-blue-500"><i data-lucide="map-pin" class="w-5 h-5"></i></div>
+                        <h3 class="text-[11px] font-black uppercase tracking-widest text-slate-800 italic">Top Cluster</h3>
+                    </div>
+                    <div class="space-y-4 overflow-y-auto custom-scrollbar pr-1">
+                        <% rankingCluster.slice(0, 5).forEach((c, i) => { %>
+                            <div class="p-4 bg-slate-50 rounded-3xl border border-transparent hover:border-blue-200 transition-all mb-1">
+                                <div class="flex justify-between items-start mb-2">
+                                    <p class="text-[10px] font-black text-slate-800 uppercase tracking-tight text-left"><%= c.name %></p>
+                                    <span class="text-[10px] font-black text-blue-600">Rp <%= c.totalNilai.toLocaleString('id-ID') %></span>
+                                </div>
+                                <div class="grid grid-cols-3 gap-1 mb-2 border-b border-slate-200 pb-2">
+                                    <div class="text-[7px] font-bold text-blue-500 text-center uppercase">PSB: Rp <%= c.nilaiPsb.toLocaleString('id-ID') %></div>
+                                    <div class="text-[7px] font-bold text-orange-500 text-center uppercase">CM: Rp <%= c.nilaiCm.toLocaleString('id-ID') %></div>
+                                    <div class="text-[7px] font-bold text-purple-500 text-center uppercase">PM: Rp <%= c.nilaiPm.toLocaleString('id-ID') %></div>
+                                    <div class="text-[7px] font-bold text-green-500 text-center uppercase">Mutasi: Rp <%= c.nilaiMutasi.toLocaleString('id-ID') %></div>
+                                    <div class="text-[7px] font-bold text-red-500 text-center uppercase">Dismantle: Rp <%= c.nilaiDismantle.toLocaleString('id-ID') %></div>
+                                </div>
+                                <div class="grid grid-cols-4 gap-1 text-center">
+                                    <div>
+                                        <p class="text-[7px] font-bold text-slate-400 uppercase">Total</p>
+                                        <p class="text-[9px] font-black text-slate-700"><%= c.count %></p>
+                                    </div>
+                                    <div>
+                                        <p class="text-[7px] font-bold text-slate-400 uppercase">PSB</p>
+                                        <p class="text-[9px] font-black text-blue-500"><%= c.psb %></p>
+                                    </div>
+                                    <div>
+                                        <p class="text-[7px] font-bold text-slate-400 uppercase">CM</p>
+                                        <p class="text-[9px] font-black text-orange-500"><%= c.cm %></p>
+                                    </div>
+                                    <div>
+                                        <p class="text-[7px] font-bold text-slate-400 uppercase">PM</p>
+                                        <p class="text-[9px] font-black text-purple-500"><%= c.pm %></p>
+                                    </div>
+                                    <div>
+                                        <p class="text-[7px] font-bold text-slate-400 uppercase">Mutasi</p>
+                                        <p class="text-[9px] font-black text-green-500"><%= c.mutasi %></p>
+                                    </div>
+                                    <div>
+                                        <p class="text-[7px] font-bold text-slate-400 uppercase">Dismantle</p>
+                                        <p class="text-[9px] font-black text-red-500"><%= c.dismantle %></p>
+                                    </div>
+                                </div>
+                            </div>
+                        <% }) %>
+                    </div>
+                </div>
+
+                <div class="bg-white p-7 rounded-[40px] border border-slate-100 shadow-sm flex flex-col">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="p-2 bg-emerald-50 rounded-xl text-emerald-500"><i data-lucide="pie-chart" class="w-5 h-5"></i></div>
+                        <h3 class="text-[11px] font-black uppercase tracking-widest text-slate-800 italic">Kontribusi Area</h3>
+                    </div>
+                    <div class="space-y-4 overflow-y-auto custom-scrollbar pr-1">
+                        <% rankingArea.forEach(a => { %>
+                            <div class="p-4 bg-slate-50 rounded-3xl border border-slate-100 mb-4 transition-all hover:border-emerald-200">
+                                <div class="flex justify-between items-start mb-2">
+                                    <span class="text-[10px] font-black text-slate-800 uppercase tracking-tight"><%= a.name %></span>
+                                    <span class="text-[10px] font-black text-emerald-600">Rp <%= a.totalNilai.toLocaleString('id-ID') %></span>
+                                </div>
+                                <div class="grid grid-cols-3 gap-1 mb-2 border-b border-slate-200 pb-2">
+                                    <div class="text-[7px] font-bold text-blue-500 text-center uppercase">PSB: Rp <%= a.nilaiPsb.toLocaleString('id-ID') %></div>
+                                    <div class="text-[7px] font-bold text-orange-500 text-center uppercase">CM: Rp <%= a.nilaiCm.toLocaleString('id-ID') %></div>
+                                    <div class="text-[7px] font-bold text-purple-500 text-center uppercase">PM: Rp <%= a.nilaiPm.toLocaleString('id-ID') %></div>
+                                    <div class="text-[7px] font-bold text-green-500 text-center uppercase">Mutasi: Rp <%= a.nilaiMutasi.toLocaleString('id-ID') %></div>
+                                    <div class="text-[7px] font-bold text-red-500 text-center uppercase">Dismantle: Rp <%= a.nilaiDismantle.toLocaleString('id-ID') %></div>
+                                </div>
+                                <div class="grid grid-cols-4 gap-1 text-center">
+                                    <div>
+                                        <p class="text-[7px] font-bold text-slate-400 uppercase">Total</p>
+                                        <p class="text-[9px] font-black text-slate-700"><%= a.count %></p>
+                                    </div>
+                                    <div>
+                                        <p class="text-[7px] font-bold text-slate-400 uppercase">PSB</p>
+                                        <p class="text-[9px] font-black text-blue-500"><%= a.psb %></p>
+                                    </div>
+                                    <div>
+                                        <p class="text-[7px] font-bold text-slate-400 uppercase">CM</p>
+                                        <p class="text-[9px] font-black text-orange-500"><%= a.cm %></p>
+                                    </div>
+                                    <div>
+                                        <p class="text-[7px] font-bold text-slate-400 uppercase">PM</p>
+                                        <p class="text-[9px] font-black text-purple-500"><%= a.pm %></p>
+                                    </div>
+                                    <div>
+                                        <p class="text-[7px] font-bold text-slate-400 uppercase">Mutasi</p>
+                                        <p class="text-[9px] font-black text-green-500"><%= a.mutasi %></p>
+                                    </div>
+                                    <div>
+                                        <p class="text-[7px] font-bold text-slate-400 uppercase">Dismantle</p>
+                                        <p class="text-[9px] font-black text-red-500"><%= a.dismantle %></p>
+                                    </div>
+                                </div>
+                            </div>
+                        <% }) %>
+                        <div class="p-4 bg-blue-600 rounded-3xl shadow-xl shadow-blue-100 mt-2">
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="text-[10px] font-black text-white uppercase tracking-tight italic">KAA (TOTAL GABUNGAN)</span>
+                                <span class="text-[10px] font-black text-blue-100">Rp <%= totalKaa.totalNilai.toLocaleString('id-ID') %></span>
+                            </div>
+                            <div class="grid grid-cols-3 gap-1 mb-2 border-b border-blue-400/30 pb-2">
+                                <div class="text-[7px] font-bold text-blue-100 text-center uppercase">PSB: Rp <%= totalKaa.nilaiPsb.toLocaleString('id-ID') %></div>
+                                <div class="text-[7px] font-bold text-orange-100 text-center uppercase">CM: Rp <%= totalKaa.nilaiCm.toLocaleString('id-ID') %></div>
+                                <div class="text-[7px] font-bold text-purple-100 text-center uppercase">PM: Rp <%= totalKaa.nilaiPm.toLocaleString('id-ID') %></div>
+                                <div class="text-[7px] font-bold text-green-100 text-center uppercase">Mutasi: Rp <%= totalKaa.nilaiMutasi.toLocaleString('id-ID') %></div>
+                                <div class="text-[7px] font-bold text-red-100 text-center uppercase">Dismantle: Rp <%= totalKaa.dismantle.toLocaleString('id-ID') %></div>
+                            </div>
+                            <div class="grid grid-cols-4 gap-1 text-center">
+                                <div>
+                                    <p class="text-[7px] font-bold text-blue-200 uppercase">Total</p>
+                                    <p class="text-[9px] font-black text-white"><%= totalKaa.count %></p>
+                                </div>
+                                <div>
+                                    <p class="text-[7px] font-bold text-blue-200 uppercase">PSB</p>
+                                    <p class="text-[9px] font-black text-white"><%= totalKaa.psb %></p>
+                                </div>
+                                <div>
+                                    <p class="text-[7px] font-bold text-blue-200 uppercase">CM</p>
+                                    <p class="text-[9px] font-black text-white"><%= totalKaa.cm %></p>
+                                </div>
+                                <div>
+                                    <p class="text-[7px] font-bold text-blue-200 uppercase">PM</p>
+                                    <p class="text-[9px] font-black text-white"><%= totalKaa.pm %></p>
+                                </div>
+                                <div>
+                                    <p class="text-[7px] font-bold text-blue-200 uppercase">Mutasi</p>
+                                    <p class="text-[9px] font-black text-white"><%= totalKaa.mutasi %></p>
+                                </div>
+                                <div>
+                                    <p class="text-[7px] font-bold text-blue-200 uppercase">Dismantle</p>
+                                    <p class="text-[9px] font-black text-white"><%= totalKaa.dismantle %></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% } else { %>
+                <div class="xl:col-span-3 bg-white p-8 rounded-[40px] border border-slate-100 shadow-sm">
+                    <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                        <div class="flex items-center gap-6">
+                            <div class="w-16 h-16 bg-blue-50 rounded-3xl flex items-center justify-center text-blue-600 shadow-inner">
+                                <i data-lucide="briefcase" class="w-8 h-8"></i>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Performa Perusahaan</p>
+                                <h3 class="text-xl font-black text-slate-800 uppercase italic"><%= mitraSelfStats.name %></h3>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap gap-4 justify-center md:justify-end">
+                            <div class="text-center p-4 bg-blue-50 rounded-2xl min-w-[140px] border border-blue-100">
+                                <p class="text-[8px] font-black text-blue-400 uppercase mb-1">TOTAL PSB</p>
+                                <p class="text-sm font-black text-blue-600">Rp <%= mitraSelfStats.nilaiPsb.toLocaleString('id-ID') %></p>
+                                <p class="text-[9px] font-bold text-blue-300 mt-1 uppercase"><%= mitraSelfStats.psb %> UNIT</p>
+                            </div>
+                            <div class="text-center p-4 bg-orange-50 rounded-2xl min-w-[140px] border border-orange-100">
+                                <p class="text-[8px] font-black text-orange-400 uppercase mb-1">TOTAL CM</p>
+                                <p class="text-sm font-black text-orange-600">Rp <%= mitraSelfStats.nilaiCm.toLocaleString('id-ID') %></p>
+                                <p class="text-[9px] font-bold text-orange-300 mt-1 uppercase"><%= mitraSelfStats.cm %> UNIT</p>
+                            </div>
+                            <div class="text-center p-4 bg-purple-50 rounded-2xl min-w-[140px] border border-purple-100">
+                                <p class="text-[8px] font-black text-purple-400 uppercase mb-1">TOTAL PM</p>
+                                <p class="text-sm font-black text-purple-600">Rp <%= mitraSelfStats.nilaiPm.toLocaleString('id-ID') %></p>
+                                <p class="text-[9px] font-bold text-purple-300 mt-1 uppercase"><%= mitraSelfStats.pm %> UNIT</p>
+                            </div>
+                            <div class="text-center p-4 bg-green-50 rounded-2xl min-w-[140px] border border-green-100">
+                                <p class="text-[8px] font-black text-green-400 uppercase mb-1">TOTAL MUTASI</p>
+                                <p class="text-sm font-black text-green-600">Rp <%= mitraSelfStats.nilaiMutasi.toLocaleString('id-ID') %></p>
+                                <p class="text-[9px] font-bold text-green-300 mt-1 uppercase"><%= mitraSelfStats.mutasi %> UNIT</p>
+                            </div>
+                            <div class="text-center p-4 bg-red-50 rounded-2xl min-w-[140px] border border-red-100">
+                                <p class="text-[8px] font-black text-red-400 uppercase mb-1">TOTAL DISMANTLE</p>
+                                <p class="text-sm font-black text-red-600">Rp <%= mitraSelfStats.dismantle.toLocaleString('id-ID') %></p>
+                                <p class="text-[9px] font-bold text-red-300 mt-1 uppercase"><%= mitraSelfStats.dismantle %> UNIT</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+
+       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <button onclick="setQuickFilter('')" class="status-card bg-white p-6 rounded-[32px] border border-slate-200 shadow-sm text-left hover:border-blue-500 transition-all">
                 <p class="text-[10px] font-black text-slate-400 uppercase tracking-wider mb-2">Semua</p>
                 <h3 class="text-3xl font-black text-slate-800"><%= data.length %></h3>
             </button>
-            <button onclick="filterStatus('PENDING')" class="status-card bg-white p-6 rounded-[32px] border border-slate-200 shadow-sm text-left hover:border-amber-500 transition-all border-b-4 border-b-amber-400">
+            
+            <button onclick="setQuickFilter('WAITING')" class="status-card bg-white p-6 rounded-[32px] border border-slate-200 shadow-sm text-left hover:border-amber-500 transition-all border-b-4 border-b-amber-400">
                 <p class="text-[10px] font-black text-slate-400 uppercase tracking-wider mb-2">Pending</p>
-                <h3 class="text-3xl font-black text-amber-500"><%= data.filter(d => d.status !== 'COMPLETED' && d.status !== 'REJECTED').length %></h3>
+                <h3 class="text-3xl font-black text-amber-500"><%= data.filter(d => d.status.includes('WAITING')).length %></h3>
             </button>
-            <button onclick="filterStatus('COMPLETED')" class="status-card bg-white p-6 rounded-[32px] border border-slate-200 shadow-sm text-left hover:border-emerald-500 transition-all border-b-4 border-b-emerald-400">
+            
+            <button onclick="setQuickFilter('COMPLETED')" class="status-card bg-white p-6 rounded-[32px] border border-slate-200 shadow-sm text-left hover:border-emerald-500 transition-all border-b-4 border-b-emerald-400">
                 <p class="text-[10px] font-black text-slate-400 uppercase tracking-wider mb-2">Selesai</p>
                 <h3 class="text-3xl font-black text-emerald-500"><%= data.filter(d => d.status === 'COMPLETED').length %></h3>
             </button>
-            <button onclick="filterStatus('REJECTED')" class="status-card bg-white p-6 rounded-[32px] border border-slate-200 shadow-sm text-left hover:border-red-500 transition-all border-b-4 border-b-red-400">
+            
+            <button onclick="setQuickFilter('REJECTED')" class="status-card bg-white p-6 rounded-[32px] border border-slate-200 shadow-sm text-left hover:border-red-500 transition-all border-b-4 border-b-red-400">
                 <p class="text-[10px] font-black text-slate-400 uppercase tracking-wider mb-2">Ditolak</p>
                 <h3 class="text-3xl font-black text-red-500"><%= data.filter(d => d.status === 'REJECTED').length %></h3>
             </button>
         </div>
+<script>
+    function setQuickFilter(statusValue) {
+    const statusSelect = document.getElementById('filterStatus');
+    if (statusSelect) {
+        statusSelect.value = statusValue; // Ubah nilai dropdown status
+        
+        // Picu event 'change' secara manual agar fungsi updateTable() berjalan
+        statusSelect.dispatchEvent(new Event('change')); 
+        
+        // Opsional: Scroll halus ke arah tabel agar user melihat perubahannya
+        document.getElementById('mainTable').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+}
+</script>
 
-<div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-10">
+<div class="bg-white rounded-[40px] border border-slate-200 shadow-xl overflow-hidden">
     
-    <% if (user.role !== 'Mitra') { %>
-        <div class="bg-white p-7 rounded-[40px] border border-slate-100 shadow-sm flex flex-col">
-            <div class="flex items-center gap-3 mb-6">
-                <div class="p-2 bg-amber-50 rounded-xl text-amber-500"><i data-lucide="award" class="w-5 h-5"></i></div>
-                <h3 class="text-[11px] font-black uppercase tracking-widest text-slate-800 italic">Peringkat Mitra</h3>
-            </div>
-            <div class="space-y-4 overflow-y-auto custom-scrollbar pr-1">
-                <% rankingMitra.slice(0, 5).forEach((m, i) => { %>
-                    <div class="p-4 bg-slate-50 rounded-3xl border border-transparent hover:border-amber-200 transition-all mb-1">
-                        <div class="flex justify-between items-start mb-2">
-                            <div class="flex items-center gap-2">
-                                <span class="text-[10px] font-black <%= i === 0 ? 'text-amber-500' : 'text-slate-300' %>">#<%= i+1 %></span>
-                                <p class="text-[10px] font-black text-slate-800 uppercase tracking-tight"><%= m.name %></p>
-                            </div>
-                            <span class="text-[10px] font-black text-blue-600">Rp <%= m.totalNilai.toLocaleString('id-ID') %></span>
-                        </div>
-                        
-                        <div class="grid grid-cols-3 gap-1 mb-2 border-b border-slate-200 pb-2">
-                            <div class="text-[7px] font-bold text-blue-500 text-center uppercase">PSB: Rp <%= m.nilaiPsb.toLocaleString('id-ID') %></div>
-                            <div class="text-[7px] font-bold text-orange-500 text-center uppercase">CM: Rp <%= m.nilaiCm.toLocaleString('id-ID') %></div>
-                            <div class="text-[7px] font-bold text-purple-500 text-center uppercase">PM: Rp <%= m.nilaiPm.toLocaleString('id-ID') %></div>
-                            <div class="text-[7px] font-bold text-green-500 text-center uppercase">Mutasi: Rp <%= m.nilaiMutasi.toLocaleString('id-ID') %></div>
-                            <div class="text-[7px] font-bold text-red-500 text-center uppercase">Dismantle: Rp <%= m.nilaiDismantle.toLocaleString('id-ID') %></div>
-                            
-                        </div>
+    <div class="p-6 md:p-8 flex flex-col md:flex-row justify-between items-center gap-4 border-b border-slate-50">
+        <div class="flex items-center gap-2">
+            <i data-lucide="list-filter" class="w-5 h-5 text-blue-600"></i>
+            <h2 class="font-bold text-slate-700">Daftar Pengajuan Terbaru</h2>
+        </div>
+        
+        <% if(user.role === 'SuperAdmin') { %>
+            <button onclick="toggleModal('modalUser')" class="bg-indigo-600 text-white px-8 py-4 rounded-3xl font-bold shadow-lg hover:bg-indigo-700 transition-all flex items-center gap-3">
+                <i data-lucide="user-plus"></i> Kelola User
+            </button>
+        <% } %>
+    </div>
 
-                        <div class="grid grid-cols-4 gap-1 text-center">
-                            <div><p class="text-[7px] font-bold text-slate-400 uppercase">Total</p><p class="text-[9px] font-black text-slate-700"><%= m.count %></p></div>
-                            <div><p class="text-[7px] font-bold text-slate-400 uppercase">PSB</p><p class="text-[9px] font-black text-blue-500"><%= m.psb %></p></div>
-                            <div><p class="text-[7px] font-bold text-slate-400 uppercase">CM</p><p class="text-[9px] font-black text-orange-500"><%= m.cm %></p></div>
-                            <div><p class="text-[7px] font-bold text-slate-400 uppercase">PM</p><p class="text-[9px] font-black text-purple-500"><%= m.pm %></p></div>
-                            <div><p class="text-[7px] font-bold text-slate-400 uppercase">Mutasi</p><p class="text-[9px] font-black text-green-500"><%= m.mutasi %></p></div>
-                            <div><p class="text-[7px] font-bold text-slate-400 uppercase">Dismantle</p><p class="text-[9px] font-black text-red-500"><%= m.dismantle %></p></div>
-                        </div>
-                    </div>
-                <% }) %>
-            </div>
+    <div class="flex flex-wrap items-center gap-3 p-6 bg-slate-50/50 border-b border-slate-100">
+        <div class="relative flex-1 min-w-[200px]">
+            <i data-lucide="search" class="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+            <input type="text" id="tableSearch" placeholder="CARI PROJECT..." 
+                class="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-2xl text-[10px] font-black text-slate-700 focus:ring-2 focus:ring-blue-500 placeholder:text-slate-400 uppercase outline-none shadow-sm">
         </div>
 
-        <div class="bg-white p-7 rounded-[40px] border border-slate-100 shadow-sm flex flex-col">
-            <div class="flex items-center gap-3 mb-6">
-                <div class="p-2 bg-blue-50 rounded-xl text-blue-500"><i data-lucide="map-pin" class="w-5 h-5"></i></div>
-                <h3 class="text-[11px] font-black uppercase tracking-widest text-slate-800 italic">Top Cluster</h3>
-            </div>
-            <div class="space-y-4 overflow-y-auto custom-scrollbar pr-1">
-                <% rankingCluster.slice(0, 5).forEach((c, i) => { %>
-                    <div class="p-4 bg-slate-50 rounded-3xl border border-transparent hover:border-blue-200 transition-all mb-1">
-                        <div class="flex justify-between items-start mb-2">
-                            <p class="text-[10px] font-black text-slate-800 uppercase tracking-tight text-left"><%= c.name %></p>
-                            <span class="text-[10px] font-black text-blue-600">Rp <%= c.totalNilai.toLocaleString('id-ID') %></span>
-                        </div>
-
-                        <div class="grid grid-cols-3 gap-1 mb-2 border-b border-slate-200 pb-2">
-                            <div class="text-[7px] font-bold text-blue-500 text-center uppercase">PSB: Rp <%= c.nilaiPsb.toLocaleString('id-ID') %></div>
-                            <div class="text-[7px] font-bold text-orange-500 text-center uppercase">CM: Rp <%= c.nilaiCm.toLocaleString('id-ID') %></div>
-                            <div class="text-[7px] font-bold text-purple-500 text-center uppercase">PM: Rp <%= c.nilaiPm.toLocaleString('id-ID') %></div>
-                            <div class="text-[7px] font-bold text-green-500 text-center uppercase">Mutasi: Rp <%= c.nilaiMutasi.toLocaleString('id-ID') %></div>
-                            <div class="text-[7px] font-bold text-red-500 text-center uppercase">Dismantle: Rp <%= c.nilaiDismantle.toLocaleString('id-ID') %></div>
-                        </div>
-
-                        <div class="grid grid-cols-4 gap-1 text-center">
-                            <div><p class="text-[7px] font-bold text-slate-400 uppercase">Total</p><p class="text-[9px] font-black text-slate-700"><%= c.count %></p></div>
-                            <div><p class="text-[7px] font-bold text-slate-400 uppercase">PSB</p><p class="text-[9px] font-black text-blue-500"><%= c.psb %></p></div>
-                            <div><p class="text-[7px] font-bold text-slate-400 uppercase">CM</p><p class="text-[9px] font-black text-orange-500"><%= c.cm %></p></div>
-                            <div><p class="text-[7px] font-bold text-slate-400 uppercase">PM</p><p class="text-[9px] font-black text-purple-500"><%= c.pm %></p></div>
-                            <div><p class="text-[7px] font-bold text-slate-400 uppercase">Mutasi</p><p class="text-[9px] font-black text-green-500"><%= c.mutasi %></p></div>
-                            <div><p class="text-[7px] font-bold text-slate-400 uppercase">Dismantle</p><p class="text-[9px] font-black text-red-500"><%= c.dismantle %></p></div>
-                        </div>
-                    </div>
-                <% }) %>
-            </div>
+        <div class="relative w-full md:w-40">
+            <select id="filterArea" class="w-full pl-4 pr-10 py-3 bg-white border border-slate-200 rounded-2xl text-[10px] font-black text-slate-700 focus:ring-2 focus:ring-blue-500 appearance-none uppercase cursor-pointer outline-none shadow-sm">
+                <option value="">SEMUA AREA</option>
+                <% if (data && data.length > 0) { 
+                    const areas = [...new Set(data.map(item => item.area))].sort();
+                    areas.forEach(a => { %>
+                        <option value="<%= a %>"><%= a %></option>
+                <% })} %>
+            </select>
+            <i data-lucide="map-pin" class="w-3.5 h-3.5 absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"></i>
         </div>
 
-        <div class="bg-white p-7 rounded-[40px] border border-slate-100 shadow-sm flex flex-col">
-            <div class="flex items-center gap-3 mb-6">
-                <div class="p-2 bg-emerald-50 rounded-xl text-emerald-500"><i data-lucide="pie-chart" class="w-5 h-5"></i></div>
-                <h3 class="text-[11px] font-black uppercase tracking-widest text-slate-800 italic">Kontribusi Area</h3>
-            </div>
-            <div class="space-y-4 overflow-y-auto custom-scrollbar pr-1">
-                <% rankingArea.forEach(a => { %>
-                    <div class="p-4 bg-slate-50 rounded-3xl border border-slate-100 mb-4 transition-all hover:border-emerald-200">
-                        <div class="flex justify-between items-start mb-2">
-                            <span class="text-[10px] font-black text-slate-800 uppercase tracking-tight"><%= a.name %></span>
-                            <span class="text-[10px] font-black text-emerald-600">Rp <%= a.totalNilai.toLocaleString('id-ID') %></span>
-                        </div>
-                        
-                        <div class="grid grid-cols-3 gap-1 mb-2 border-b border-slate-200 pb-2">
-                            <div class="text-[7px] font-bold text-blue-500 text-center uppercase">PSB: Rp <%= a.nilaiPsb.toLocaleString('id-ID') %></div>
-                            <div class="text-[7px] font-bold text-orange-500 text-center uppercase">CM: Rp <%= a.nilaiCm.toLocaleString('id-ID') %></div>
-                            <div class="text-[7px] font-bold text-purple-500 text-center uppercase">PM: Rp <%= a.nilaiPm.toLocaleString('id-ID') %></div>
-                            <div class="text-[7px] font-bold text-green-500 text-center uppercase">Mutasi: Rp <%= a.nilaiMutasi.toLocaleString('id-ID') %></div>
-                            <div class="text-[7px] font-bold text-red-500 text-center uppercase">Dismantle: Rp <%= a.nilaiDismantle.toLocaleString('id-ID') %></div>
-
-                        </div>
-
-                        <div class="grid grid-cols-4 gap-1 text-center">
-                            <div><p class="text-[7px] font-bold text-slate-400 uppercase">Total</p><p class="text-[9px] font-black text-slate-700"><%= a.count %></p></div>
-                            <div><p class="text-[7px] font-bold text-slate-400 uppercase">PSB</p><p class="text-[9px] font-black text-blue-500"><%= a.psb %></p></div>
-                            <div><p class="text-[7px] font-bold text-slate-400 uppercase">CM</p><p class="text-[9px] font-black text-orange-500"><%= a.cm %></p></div>
-                            <div><p class="text-[7px] font-bold text-slate-400 uppercase">PM</p><p class="text-[9px] font-black text-purple-500"><%= a.pm %></p></div>
-                            <div><p class="text-[7px] font-bold text-slate-400 uppercase">Mutasi</p><p class="text-[9px] font-black text-green-500"><%= a.mutasi %></p></div>
-                            <div><p class="text-[7px] font-bold text-slate-400 uppercase">Dismantle</p><p class="text-[9px] font-black text-red-500"><%= a.dismantle %></p></div>
-                        </div>
-                    </div>
-                <% }) %>
-
-                <div class="p-4 bg-blue-600 rounded-3xl shadow-xl shadow-blue-100 mt-2">
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="text-[10px] font-black text-white uppercase tracking-tight italic">KAA (TOTAL GABUNGAN)</span>
-                        <span class="text-[10px] font-black text-blue-100">Rp <%= totalKaa.totalNilai.toLocaleString('id-ID') %></span>
-                    </div>
-
-                    <div class="grid grid-cols-3 gap-1 mb-2 border-b border-blue-400/30 pb-2">
-                        <div class="text-[7px] font-bold text-blue-100 text-center uppercase">PSB: Rp <%= totalKaa.nilaiPsb.toLocaleString('id-ID') %></div>
-                        <div class="text-[7px] font-bold text-orange-100 text-center uppercase">CM: Rp <%= totalKaa.nilaiCm.toLocaleString('id-ID') %></div>
-                        <div class="text-[7px] font-bold text-purple-100 text-center uppercase">PM: Rp <%= totalKaa.nilaiPm.toLocaleString('id-ID') %></div>
-                        <div class="text-[7px] font-bold text-green-100 text-center uppercase">Mutasi: Rp <%= totalKaa.nilaiMutasi.toLocaleString('id-ID') %></div>
-                        <div class="text-[7px] font-bold text-red-100 text-center uppercase">Dismantle: Rp <%= totalKaa.nilaiDismantle.toLocaleString('id-ID') %></div>
-                    </div>
-
-                    <div class="grid grid-cols-4 gap-1 text-center">
-                        <div><p class="text-[7px] font-bold text-blue-200 uppercase">Total</p><p class="text-[9px] font-black text-white"><%= totalKaa.count %></p></div>
-                        <div><p class="text-[7px] font-bold text-blue-200 uppercase">PSB</p><p class="text-[9px] font-black text-white"><%= totalKaa.psb %></p></div>
-                        <div><p class="text-[7px] font-bold text-blue-200 uppercase">CM</p><p class="text-[9px] font-black text-white"><%= totalKaa.cm %></p></div>
-                        <div><p class="text-[7px] font-bold text-blue-200 uppercase">PM</p><p class="text-[9px] font-black text-white"><%= totalKaa.pm %></p></div>
-                        <div><p class="text-[7px] font-bold text-blue-200 uppercase">Mutasi</p><p class="text-[9px] font-black text-white"><%= totalKaa.mutasi %></p></div>
-                        <div><p class="text-[7px] font-bold text-blue-200 uppercase">Dismantle</p><p class="text-[9px] font-black text-white"><%= totalKaa.dismantle %></p></div>
-                    </div>
-                </div>
-            </div>
+        <div class="relative w-full md:w-40">
+            <select id="filterCluster" class="w-full pl-4 pr-10 py-3 bg-white border border-slate-200 rounded-2xl text-[10px] font-black text-slate-700 focus:ring-2 focus:ring-blue-500 appearance-none uppercase cursor-pointer outline-none shadow-sm">
+                <option value="">SEMUA CLUSTER</option>
+                <% if (data && data.length > 0) { 
+                    const clusters = [...new Set(data.map(item => item.cluster))].sort();
+                    clusters.forEach(c => { %>
+                        <option value="<%= c %>"><%= c %></option>
+                <% })} %>
+            </select>
+            <i data-lucide="network" class="w-3.5 h-3.5 absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"></i>
         </div>
 
-    <% } else { %>
-        <div class="xl:col-span-3 bg-white p-8 rounded-[40px] border border-slate-100 shadow-sm">
-            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-                <div class="flex items-center gap-6">
-                    <div class="w-16 h-16 bg-blue-50 rounded-3xl flex items-center justify-center text-blue-600 shadow-inner">
-                        <i data-lucide="briefcase" class="w-8 h-8"></i>
-                    </div>
-                    <div>
-                        <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Performa Perusahaan</p>
-                        <h3 class="text-xl font-black text-slate-800 uppercase italic"><%= mitraSelfStats.name %></h3>
-                    </div>
-                </div>
-                
-                <div class="flex flex-wrap gap-4 justify-center md:justify-end">
-                    <div class="text-center p-4 bg-blue-50 rounded-2xl min-w-[140px] border border-blue-100">
-                        <p class="text-[8px] font-black text-blue-400 uppercase mb-1">TOTAL PSB</p>
-                        <p class="text-sm font-black text-blue-600">Rp <%= mitraSelfStats.nilaiPsb.toLocaleString('id-ID') %></p>
-                        <p class="text-[9px] font-bold text-blue-300 mt-1 uppercase"><%= mitraSelfStats.psb %> UNIT</p>
-                    </div>
-                    <div class="text-center p-4 bg-orange-50 rounded-2xl min-w-[140px] border border-orange-100">
-                        <p class="text-[8px] font-black text-orange-400 uppercase mb-1">TOTAL CM</p>
-                        <p class="text-sm font-black text-orange-600">Rp <%= mitraSelfStats.nilaiCm.toLocaleString('id-ID') %></p>
-                        <p class="text-[9px] font-bold text-orange-300 mt-1 uppercase"><%= mitraSelfStats.cm %> UNIT</p>
-                    </div>
-                    <div class="text-center p-4 bg-purple-50 rounded-2xl min-w-[140px] border border-purple-100">
-                        <p class="text-[8px] font-black text-purple-400 uppercase mb-1">TOTAL PM</p>
-                        <p class="text-sm font-black text-purple-600">Rp <%= mitraSelfStats.nilaiPm.toLocaleString('id-ID') %></p>
-                        <p class="text-[9px] font-bold text-purple-300 mt-1 uppercase"><%= mitraSelfStats.pm %> UNIT</p>
-                    </div>
-                    <div class="text-center p-4 bg-green-50 rounded-2xl min-w-[140px] border border-green-100">
-                        <p class="text-[8px] font-black text-green-400 uppercase mb-1">TOTAL MUTASI</p>
-                        <p class="text-sm font-black text-green-600">Rp <%= mitraSelfStats.nilaiMutasi.toLocaleString('id-ID') %></p>
-                        <p class="text-[9px] font-bold text-green-300 mt-1 uppercase"><%= mitraSelfStats.mutasi %> UNIT</p>
-                    </div>
-                    <div class="text-center p-4 bg-red-50 rounded-2xl min-w-[140px] border border-red-100">
-                        <p class="text-[8px] font-black text-red-400 uppercase mb-1">TOTAL DISMANTLE</p>
-                        <p class="text-sm font-black text-red-600">Rp <%= mitraSelfStats.nilaiDismantle.toLocaleString('id-ID') %></p>
-                        <p class="text-[9px] font-bold text-red-300 mt-1 uppercase"><%= mitraSelfStats.dismantle %> UNIT</p>
-                    </div>
-                </div>
+        <div class="relative w-full md:w-40">
+            <select id="filterStatus" class="w-full pl-4 pr-10 py-3 bg-white border border-slate-200 rounded-2xl text-[10px] font-black text-slate-700 focus:ring-2 focus:ring-blue-500 appearance-none uppercase cursor-pointer outline-none shadow-sm">
+                <option value="">SEMUA STATUS</option>
+                <option value="WAITING">WAITING / PROGRESS</option>
+                <option value="COMPLETED">COMPLETED</option>
+                <option value="REJECTED">REJECTED</option>
+            </select>
+            <i data-lucide="layers" class="w-3.5 h-3.5 absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"></i>
+        </div>
+
+        <button id="btnClearFilter" class="h-[42px] px-5 bg-white border border-red-100 text-red-500 rounded-2xl text-[10px] font-black hover:bg-red-500 hover:text-white transition-all uppercase flex items-center gap-2 shadow-sm whitespace-nowrap">
+            <i data-lucide="refresh-ccw" class="w-3 h-3"></i>
+            <span>Clear</span>
+        </button>
+
+        <div class="flex items-center gap-2 ml-auto">
+            <select id="viewLimit" class="pl-4 pr-8 py-3 bg-slate-900 text-white border-none rounded-2xl text-[10px] font-black focus:ring-0 cursor-pointer uppercase outline-none shadow-sm">
+                <option value="10">10</option>
+                <option value="50">50</option>
+                <option value="all">ALL</option>
+            </select>
+            <div class="h-[42px] px-4 bg-blue-600 rounded-2xl flex items-center justify-center min-w-[45px] shadow-lg shadow-blue-100">
+                <span id="rowCount" class="text-xs font-black text-white">0</span>
             </div>
         </div>
-    <% } %>
-</div>
+    </div>
 
-        <div class="bg-white rounded-[40px] border border-slate-200 shadow-xl overflow-hidden">
-            <div class="p-6 md:p-8 flex flex-col md:flex-row justify-between items-center gap-4 border-b border-slate-50">
-                <div class="flex items-center gap-2">
-                    <i data-lucide="list-filter" class="w-5 h-5 text-blue-600"></i>
-                    <h2 class="font-bold text-slate-700">Daftar Pengajuan Terbaru</h2>
-                </div>
-                <% if(user.role === 'SuperAdmin') { %>
-                    <button onclick="toggleModal('modalUser')" class="bg-indigo-600 text-white px-8 py-4 rounded-3xl font-bold shadow-lg hover:bg-indigo-700 transition-all flex items-center gap-3">
-                        <i data-lucide="user-plus"></i> Kelola User
-                    </button>
-                <% } %>
-                <div class="relative w-full md:w-80">
-                    <i data-lucide="search" class="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                    <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Cari project, mitra, atau cluster..." class="w-full pl-11 pr-4 py-3 bg-slate-50 border-none rounded-2xl text-sm outline-none focus:ring-2 focus:ring-blue-500 transition-all">
-                </div>
-            </div>
 
-            <div class="overflow-x-auto custom-scrollbar">
-<table class="w-full text-left border-separate border-spacing-y-3" id="mainTable">
-    <thead class="bg-slate-50/50 text-[10px] font-black text-slate-400 uppercase tracking-widest">
-        <tr>
-            <th class="p-6">Project & ID</th>
-            <th class="p-6">Mitra & Wilayah</th>
-            <th class="p-6">Nilai (Rp)</th>
-            <th class="p-6">Progress Alur</th>
-            <th class="p-6">Status Terakhir</th>
-            <th class="p-6 text-center">Aksi</th>
-        </tr>
-    </thead>
-    <tbody class="divide-y divide-slate-100">
-        <% data.reverse().forEach(item => { %>
-        <tr class="bg-white hover:bg-slate-50 transition-all shadow-sm rounded-3xl row-data" data-status="<%= item.status %>">
-            <td class="p-6 first:rounded-l-[32px]">
-                <div class="flex items-center gap-3">
-                    <div class="p-3 bg-blue-50 text-blue-600 rounded-2xl">
-                        <i data-lucide="briefcase" class="w-5 h-5"></i>
-                    </div>
-                    <div>
-                        <p class="font-extrabold text-slate-900 uppercase italic leading-none mb-1">#<%= item.id.toString().slice(-6) %></p>
-                        <p class="text-[11px] text-slate-600 font-black uppercase tracking-tight line-clamp-1"><%= item.projectName %></p>
-                    </div>
-                </div>
-            </td>
-
-            <td class="p-6">
-                <p class="text-xs font-black text-blue-700 italic uppercase mb-1">
-                    <%= item.mitraName || 'INTERNAL' %>
-                </p>
-                <div class="flex flex-wrap gap-1">
-                    <span class="text-[9px] bg-slate-100 px-2 py-0.5 rounded-full text-slate-500 font-bold uppercase"><%= item.area %></span>
-                    <span class="text-[9px] bg-indigo-50 px-2 py-0.5 rounded-full text-indigo-600 font-bold uppercase"><%= item.cluster %></span>
-                    <span class="text-[9px] bg-amber-50 px-2 py-0.5 rounded-full text-amber-600 font-bold uppercase"><%= item.jenisBalap %></span>
-                </div>
-            </td>
-
-            <td class="p-6">
-                <p class="text-sm font-black text-slate-800">
-                    <%= new Intl.NumberFormat('id-ID').format(item.nilai) %>
-                </p>
-                <p class="text-[8px] text-slate-400 font-bold uppercase tracking-widest">IDR Currency</p>
-            </td>
-
-            <td class="p-6">
-                <div class="flex gap-1.5 items-center mb-2">
-                    <% 
-                        // Logic for 5 Steps (Teknisi, Engineer, Lead, Head, Completed)
-                        const maxSteps = item.status === 'WAITING_HEAD' || item.step > 3 ? 5 : 4;
+    <div class="overflow-x-auto p-4">
+        <table class="w-full text-left border-separate border-spacing-y-3" id="mainTable">
+            <thead class="bg-slate-50/50 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                <tr>
+                    <th class="p-6">Project & ID</th>
+                    <th class="p-6">Mitra & Wilayah</th>
+                    <th class="p-6">Nilai (Rp)</th>
+                    <th class="p-6">Progress Alur</th>
+                    <th class="p-6">Status Terakhir</th>
+                    <th class="p-6 text-center">Aksi</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+                <% if (data && data.length > 0) { %>
+                    <% data.reverse().forEach(item => { 
+                        const isCompleted = item.status === 'COMPLETED';
+                        const isRejected = item.status === 'REJECTED';
+                        const maxSteps = 5;
                     %>
-                    <% for(let i=1; i<=maxSteps; i++) { %>
-                        <div class="h-2 w-6 rounded-full transition-all duration-500
-                            <%= item.status === 'REJECTED' ? 'bg-red-100' : 
-                               (item.step > i ? 'bg-emerald-500' : 
-                               (item.step === i ? 'bg-blue-600 animate-pulse shadow-[0_0_8px_rgba(37,99,235,0.5)]' : 'bg-slate-200')) %>">
-                        </div>
-                    <% } %>
-                </div>
-                <div class="flex justify-between items-center w-full max-w-[140px]">
-                    <p class="text-[8px] text-slate-400 font-black uppercase tracking-widest">
-                        Step <%= item.step %> of <%= maxSteps %>
-                    </p>
-                    <% if(item.status === 'COMPLETED') { %>
-                        <i data-lucide="check-circle-2" class="w-3 h-3 text-emerald-500"></i>
-                    <% } %>
-                </div>
-            </td>
+                        <tr class="bg-white hover:bg-slate-50/80 transition-all shadow-sm group" 
+                            data-area="<%= item.area %>" 
+                            data-cluster="<%= item.cluster %>"
+                            data-status="<%= item.status %>">
+                            
+                            <td class="p-6 first:rounded-l-[32px]">
+                                <div class="flex items-center gap-4">
+                                    <div class="p-3 bg-blue-50 text-blue-600 rounded-2xl group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                                        <i data-lucide="briefcase" class="w-5 h-5"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-extrabold text-slate-900 uppercase italic leading-none mb-1">#<%= item.id.toString().slice(-6) %></p>
+                                        <p class="text-[11px] text-slate-600 font-black uppercase tracking-tight line-clamp-1"><%= item.projectName %></p>
+                                    </div>
+                                </div>
+                            </td>
 
-            <td class="p-6">
-                <div class="flex flex-col gap-1">
-                    <span class="w-fit px-3 py-1 rounded-lg text-[9px] font-black border uppercase italic shadow-sm
-                        <%= item.status === 'COMPLETED' ? 'bg-emerald-50 text-emerald-600 border-emerald-200' : 
-                           (item.status === 'REJECTED' ? 'bg-red-50 text-red-600 border-red-200' : 
-                           'bg-amber-50 text-amber-600 border-amber-200 animate-fade-in') %>">
-                        <%= item.status.replace(/_/g, ' ') %>
-                    </span>
-                    <div class="flex items-center gap-1 text-[8px] text-slate-400 font-medium">
-                        <i data-lucide="calendar" class="w-2.5 h-2.5"></i>
-                        <%= new Date(item.lastUpdate).toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric'}) %>
-                    </div>
-                </div>
-            </td>
+                            <td class="p-6">
+                                <p class="text-xs font-black text-blue-700 italic uppercase mb-2"><%= item.mitraName || 'INTERNAL' %></p>
+                                <div class="flex flex-wrap gap-1">
+                                    <span class="text-[9px] bg-slate-100 px-2 py-0.5 rounded-full text-slate-500 font-bold uppercase"><%= item.area %></span>
+                                    <span class="text-[9px] bg-indigo-50 px-2 py-0.5 rounded-full text-indigo-600 font-bold uppercase"><%= item.cluster %></span>
+                                </div>
+                            </td>
 
-            <td class="p-6 text-center last:rounded-r-[32px]">
-                <button 
-                    data-item='<%- JSON.stringify(item).replace(/'/g, "&#39;").replace(/\r?\n|\r/g, " ") %>' 
-                    onclick="openDetail(JSON.parse(this.dataset.item))" 
-                    class="group bg-slate-900 text-white p-3 rounded-2xl hover:bg-blue-600 transition-all flex items-center justify-center mx-auto shadow-lg shadow-slate-200 hover:shadow-blue-200 active:scale-95"
-                >
-                    <i data-lucide="eye" class="w-4 h-4 group-hover:scale-110 transition-transform"></i>
-                </button>
-            </td>
-        </tr>
-        <% }) %>
-    </tbody>
-</table>
+                            <td class="p-6">
+                                <p class="text-sm font-black text-slate-800">
+                                    <%= new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(item.nilai) %>
+                                </p>
+                            </td>
+
+                            <td class="p-6">
+                                <div class="flex gap-1.5 items-center mb-2">
+                                    <% for (let i = 1; i <= maxSteps; i++) { %>
+                                        <div class="h-1.5 w-6 rounded-full transition-all duration-500 <%= isRejected ? 'bg-red-100' : (isCompleted || item.step > i ? 'bg-emerald-500' : (item.step === i ? 'bg-blue-600 animate-pulse shadow-[0_0_8px_rgba(37,99,235,0.4)]' : 'bg-slate-200')) %>"></div>
+                                    <% } %>
+                                </div>
+                                <p class="text-[8px] <%= isCompleted ? 'text-emerald-600 font-extrabold' : 'text-slate-400 font-black' %> uppercase tracking-widest">
+                                    <%= isCompleted ? 'All Steps Finished' : `Step ${item.step} of ${maxSteps}` %>
+                                </p>
+                            </td>
+
+                            <td class="p-6">
+                                <% 
+                                    let statusClasses = 'bg-amber-100 text-amber-700 border-amber-200 animate-[pulse_3s_infinite]';
+                                    if (isCompleted) statusClasses = 'bg-emerald-100 text-emerald-700 border-emerald-200';
+                                    if (isRejected) statusClasses = 'bg-red-100 text-red-700 border-red-200';
+                                %>
+                                <span class="w-fit px-3 py-1 rounded-lg text-[9px] font-black border uppercase italic shadow-sm <%= statusClasses %>">
+                                    <%= item.status.replace(/_/g, ' ') %>
+                                </span>
+                            </td>
+
+                            <td class="p-6 text-center last:rounded-r-[32px]">
+                                <button
+                                    data-item='<%- JSON.stringify(item).replace(/'/g, "&#39;").replace(/\r?\n|\r/g, " ") %>'
+                                    onclick="openDetail(JSON.parse(this.dataset.item))"
+                                    class="p-3 bg-slate-900 text-white rounded-2xl hover:bg-blue-600 hover:-translate-y-1 transition-all shadow-lg shadow-slate-200 active:scale-95"
+                                >
+                                    <i data-lucide="eye" class="w-4 h-4"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    <% }) %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="6" class="p-20 text-center">
+                            <div class="flex flex-col items-center opacity-20">
+                                <i data-lucide="folder-open" class="w-16 h-16 mb-4 text-slate-400"></i>
+                                <p class="font-black text-xs uppercase tracking-widest text-slate-500">Belum ada pengajuan</p>
+                            </div>
+                        </td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
 </div>
-        </div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 1. Inisialisasi Elemen
+    const searchInput = document.getElementById('tableSearch');
+    const filterArea = document.getElementById('filterArea');
+    const filterCluster = document.getElementById('filterCluster');
+    const filterStatus = document.getElementById('filterStatus');
+    const viewLimit = document.getElementById('viewLimit');
+    const btnClearFilter = document.getElementById('btnClearFilter');
+    const tableBody = document.querySelector('#mainTable tbody');
+    const rowCountLabel = document.getElementById('rowCount');
+
+    if (!tableBody) return;
+
+    const allRows = Array.from(tableBody.querySelectorAll('tr[data-area]'));
+    const allClusterOptions = Array.from(filterCluster.options);
+
+    // 2. Fungsi Relasi Dropdown (Sama seperti sebelumnya)
+    function syncClusterDropdown(selectedArea) {
+        filterCluster.innerHTML = '';
+        filterCluster.appendChild(allClusterOptions[0]);
+
+        if (selectedArea === "") {
+            for (let i = 1; i < allClusterOptions.length; i++) {
+                filterCluster.appendChild(allClusterOptions[i]);
+            }
+        } else {
+            const validClusters = new Set();
+            allRows.forEach(row => {
+                if (row.getAttribute('data-area') === selectedArea) {
+                    validClusters.add(row.getAttribute('data-cluster'));
+                }
+            });
+            allClusterOptions.forEach(opt => {
+                if (validClusters.has(opt.value)) filterCluster.appendChild(opt);
+            });
+        }
+    }
+
+    // 3. Fungsi Utama Filter
+    function updateTable() {
+        const query = (searchInput.value || "").toLowerCase().trim();
+        const areaVal = (filterArea.value || "").toUpperCase();
+        const clusterVal = (filterCluster.value || "").toUpperCase();
+        const statusVal = (filterStatus.value || "").toUpperCase();
+        const limitVal = viewLimit.value || "10";
+        const limit = limitVal === 'all' ? allRows.length : parseInt(limitVal);
+        
+        let visibleCount = 0;
+
+        allRows.forEach((row) => {
+            const rowArea = (row.getAttribute('data-area') || "").toUpperCase();
+            const rowCluster = (row.getAttribute('data-cluster') || "").toUpperCase();
+            const rowStatus = (row.getAttribute('data-status') || "").toUpperCase();
+            const rowText = row.innerText.toLowerCase();
+
+            const matchesSearch = query === "" || rowText.includes(query);
+            const matchesArea = areaVal === "" || rowArea === areaVal;
+            const matchesCluster = clusterVal === "" || rowCluster === clusterVal;
+            const matchesStatus = statusVal === "" || 
+                (statusVal === 'WAITING' ? rowStatus.includes('WAITING') : rowStatus === statusVal);
+
+            if (matchesSearch && matchesArea && matchesCluster && matchesStatus) {
+                if (visibleCount < limit) {
+                    row.style.display = '';
+                    visibleCount++;
+                } else {
+                    row.style.display = 'none';
+                }
+            } else {
+                row.style.display = 'none';
+            }
+        });
+
+        if (rowCountLabel) rowCountLabel.innerText = visibleCount;
+    }
+
+    // 4. Fungsi Reset (Clear Filter)
+    if (btnClearFilter) {
+        btnClearFilter.addEventListener('click', function() {
+            // Reset input text
+            searchInput.value = "";
+            // Reset semua dropdown ke default
+            filterArea.value = "";
+            filterStatus.value = "";
+            viewLimit.value = "10";
+            
+            // Kembalikan dropdown cluster ke kondisi awal (Semua Cluster)
+            syncClusterDropdown(""); 
+            filterCluster.value = "";
+
+            // Jalankan filter ulang
+            updateTable();
+        });
+    }
+
+    // 5. Event Listeners
+    filterArea.addEventListener('change', function() {
+        syncClusterDropdown(this.value);
+        updateTable();
+    });
+
+    [searchInput, filterCluster, filterStatus, viewLimit].forEach(el => {
+        if (el) {
+            el.addEventListener('input', updateTable);
+            el.addEventListener('change', updateTable);
+        }
+    });
+
+    updateTable();
+});
+</script>
     </main>
 
-<div id="modalTambah" class="hidden fixed inset-0 z-[60] bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4">
-    <div class="bg-white p-10 rounded-[48px] w-full max-w-2xl shadow-2xl relative border border-white max-h-[90vh] overflow-y-auto custom-scrollbar">
-        <button onclick="toggleModal('modalTambah')" class="absolute top-8 right-8 text-slate-300 hover:text-red-500 transition-all active:scale-90">
-            <i data-lucide="x-circle" class="w-8 h-8"></i>
-        </button>
-        
-        <div class="text-center mb-8">
-            <h2 class="text-3xl font-black italic mb-2 tracking-tighter uppercase">New Submission</h2>
-            <p class="text-slate-400 text-sm font-medium">Data Mitra, Area, dan Cluster terisi otomatis sesuai profil Anda.</p>
-        </div>
-
-<form id="formSubmitBalap" action="/submit-balap" method="POST" enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <div id="bulkContainer" class="md:col-span-2 space-y-8">
-        <div class="submission-item bg-white p-2 rounded-[32px] relative">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="md:col-span-2">
-                    <label class="text-[10px] font-black text-slate-400 uppercase ml-2 mb-2 block tracking-widest">Nama Project</label>
-                    <input type="text" name="projectName[]" placeholder="Masukkan nama project..." required class="w-full p-4 bg-slate-50 rounded-2xl border-none outline-none focus:ring-2 focus:ring-blue-500 font-bold shadow-inner">
-                </div>
-
-                <div>
-                    <label class="text-[10px] font-black text-slate-400 uppercase ml-2 mb-2 block tracking-widest">Nama Mitra</label>
-                    <input type="text" name="mitraName[]" value="<%= user.mitraName || 'INTERNAL' %>" readonly class="w-full p-4 bg-slate-100 text-slate-500 rounded-2xl border-none outline-none font-bold cursor-not-allowed">
-                </div>
-
-                <div>
-                    <label class="text-[10px] font-black text-slate-400 uppercase ml-2 mb-2 block tracking-widest">Pilih Wilayah Kerja</label>
-                    <select name="fullLocation[]" required class="w-full p-4 bg-slate-50 rounded-2xl border-none outline-none focus:ring-2 focus:ring-blue-500 font-bold shadow-inner text-sm">
-                        <option value="">-- Pilih Area & Cluster --</option>
-                        <% if (user.clusters && user.clusters.length > 0) { %>
-                            <% user.clusters.forEach(loc => { %>
-                                <option value="<%= loc %>"><%= loc.replace('|', ' - ') %></option>
-                            <% }) %>
-                        <% } %>
-                    </select>
-                </div>
-
-                <div>
-                    <label class="text-[10px] font-black text-slate-400 uppercase ml-2 mb-2 block tracking-widest">Jenis BALAP</label>
-                    <select name="jenisBalap[]" required class="w-full p-4 bg-slate-50 rounded-2xl border-none outline-none focus:ring-2 focus:ring-blue-500 font-bold shadow-inner text-sm">
-                        <option value="">Pilih Jenis BALAP</option>
-                        <option value="PSB">PSB</option>
-                        <option value="CM">CM</option>
-                        <option value="PM">PM</option>
-                        <option value="MUTASI">Mutasi</option>
-                        <option value="DISMANTLE">Dismantle</option>
-                    </select>
-                </div>
-
-                <div class="md:col-span-2">
-                    <label class="text-[10px] font-black text-slate-400 uppercase ml-2 mb-2 block tracking-widest">Nilai BALAP (Rp)</label>
-                    <input type="number" name="nilai[]" placeholder="Masukkan nominal angka..." required class="w-full p-4 bg-slate-50 rounded-2xl border-none outline-none focus:ring-2 focus:ring-blue-500 font-bold shadow-inner">
-                </div>
-
-                <div class="md:col-span-2">
-                    <label class="text-[10px] font-black text-slate-400 uppercase ml-2 mb-2 block tracking-widest">Upload Dokumen PDF</label>
-                    <div class="upload-area relative border-2 border-dashed border-slate-200 p-8 rounded-[32px] text-center bg-slate-50/50 hover:bg-blue-50/50 cursor-pointer transition-all group">
-                        <input type="file" name="pdf_file" accept=".pdf" required 
-                            class="absolute inset-0 w-full h-full opacity-0 z-10 cursor-pointer" 
-                            onchange="validateAndPreview(this, this.parentElement.querySelector('.file-display-name'))">
-                        
-                        <i data-lucide="upload-cloud" class="w-10 h-10 mx-auto text-slate-300 mb-2 group-hover:text-blue-500 transition-colors"></i>
-                        <p class="file-display-name text-xs font-bold text-slate-500">Tarik file PDF ke sini atau klik</p>
+    <div id="modalTambah" class="hidden fixed inset-0 z-[60] bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-white p-10 rounded-[48px] w-full max-w-2xl shadow-2xl relative border border-white max-h-[90vh] overflow-y-auto custom-scrollbar">
+            <button onclick="toggleModal('modalTambah')" class="absolute top-8 right-8 text-slate-300 hover:text-red-500 transition-all active:scale-90">
+                <i data-lucide="x-circle" class="w-8 h-8"></i>
+            </button>
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-black italic mb-2 tracking-tighter uppercase">New Submission</h2>
+                <p class="text-slate-400 text-sm font-medium">Data Mitra, Area, dan Cluster terisi otomatis sesuai profil Anda.</p>
+            </div>
+            <form id="formSubmitBalap" action="/submit-balap" method="POST" enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div id="bulkContainer" class="md:col-span-2 space-y-8">
+                    <div class="submission-item bg-white p-2 rounded-[32px] relative">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="md:col-span-2">
+                                <label class="text-[10px] font-black text-slate-400 uppercase ml-2 mb-2 block tracking-widest">Nama Project</label>
+                                <input type="text" name="projectName[]" placeholder="Masukkan nama project..." required class="w-full p-4 bg-slate-50 rounded-2xl border-none outline-none focus:ring-2 focus:ring-blue-500 font-bold shadow-inner">
+                            </div>
+                            <div>
+                                <label class="text-[10px] font-black text-slate-400 uppercase ml-2 mb-2 block tracking-widest">Nama Mitra</label>
+                                <input type="text" name="mitraName[]" value="<%= user.mitraName || 'INTERNAL' %>" readonly class="w-full p-4 bg-slate-100 text-slate-500 rounded-2xl border-none outline-none font-bold cursor-not-allowed">
+                            </div>
+                            <div>
+                                <label class="text-[10px] font-black text-slate-400 uppercase ml-2 mb-2 block tracking-widest">Pilih Wilayah Kerja</label>
+                                <select name="fullLocation[]" required class="w-full p-4 bg-slate-50 rounded-2xl border-none outline-none focus:ring-2 focus:ring-blue-500 font-bold shadow-inner text-sm">
+                                    <option value="">-- Pilih Area & Cluster --</option>
+                                    <% if (user.clusters && user.clusters.length > 0) { %>
+                                        <% user.clusters.forEach(loc => { %>
+                                            <option value="<%= loc %>"><%= loc.replace('|', ' - ') %></option>
+                                        <% }) %>
+                                    <% } %>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-[10px] font-black text-slate-400 uppercase ml-2 mb-2 block tracking-widest">Jenis BALAP</label>
+                                <select name="jenisBalap[]" required class="w-full p-4 bg-slate-50 rounded-2xl border-none outline-none focus:ring-2 focus:ring-blue-500 font-bold shadow-inner text-sm">
+                                    <option value="">Pilih Jenis BALAP</option>
+                                    <option value="PSB">PSB</option>
+                                    <option value="CM">CM</option>
+                                    <option value="PM">PM</option>
+                                    <option value="MUTASI">Mutasi</option>
+                                    <option value="DISMANTLE">Dismantle</option>
+                                </select>
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="text-[10px] font-black text-slate-400 uppercase ml-2 mb-2 block tracking-widest">Nilai BALAP (Rp)</label>
+                                <input type="number" name="nilai[]" placeholder="Masukkan nominal angka..." required class="w-full p-4 bg-slate-50 rounded-2xl border-none outline-none focus:ring-2 focus:ring-blue-500 font-bold shadow-inner">
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="text-[10px] font-black text-slate-400 uppercase ml-2 mb-2 block tracking-widest">Upload Dokumen PDF</label>
+                                <div class="upload-area relative border-2 border-dashed border-slate-200 p-8 rounded-[32px] text-center bg-slate-50/50 hover:bg-blue-50/50 cursor-pointer transition-all group">
+                                    <input type="file" name="pdf_file" accept=".pdf" required class="absolute inset-0 w-full h-full opacity-0 z-10 cursor-pointer" onchange="validateAndPreview(this, this.parentElement.querySelector('.file-display-name'))">
+                                    <i data-lucide="upload-cloud" class="w-10 h-10 mx-auto text-slate-300 mb-2 group-hover:text-blue-500 transition-colors"></i>
+                                    <p class="file-display-name text-xs font-bold text-slate-500">Tarik file PDF ke sini atau klik</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
+                <button type="button" onclick="addSubmissionRow()" class="md:col-span-2 py-4 border-2 border-dashed border-slate-200 rounded-[28px] text-slate-400 font-black text-[10px] uppercase tracking-widest hover:bg-blue-50 hover:text-blue-500 transition-all flex items-center justify-center gap-2">
+                    <i data-lucide="plus-circle" class="w-4 h-4"></i> Tambah Pengajuan Lain
+                </button>
+                <button type="submit" class="md:col-span-2 bg-blue-600 text-white py-5 rounded-[28px] font-black text-xs uppercase shadow-2xl shadow-blue-200 hover:bg-blue-700 transition-all active:scale-95">
+                    Kirim Pengajuan
+                </button>
+            </form>
+            <script>
+                function splitLocation(val) {
+                    if (val) {
+                        const parts = val.split('|');
+                        document.getElementById('hiddenArea').value = parts[0];
+                        document.getElementById('hiddenCluster').value = parts[1];
+                    } else {
+                        document.getElementById('hiddenArea').value = '';
+                        document.getElementById('hiddenCluster').value = '';
+                    }
+                }
+            </script>
         </div>
     </div>
 
-    <button type="button" onclick="addSubmissionRow()" class="md:col-span-2 py-4 border-2 border-dashed border-slate-200 rounded-[28px] text-slate-400 font-black text-[10px] uppercase tracking-widest hover:bg-blue-50 hover:text-blue-500 transition-all flex items-center justify-center gap-2">
-        <i data-lucide="plus-circle" class="w-4 h-4"></i> Tambah Pengajuan Lain
-    </button>
-
-    <button type="submit" class="md:col-span-2 bg-blue-600 text-white py-5 rounded-[28px] font-black text-xs uppercase shadow-2xl shadow-blue-200 hover:bg-blue-700 transition-all active:scale-95">
-        Kirim Pengajuan
-    </button>
-</form>
-
-<script>
-// Fungsi pembantu untuk memecah data AREA|CLUSTER ke hidden input
-function splitLocation(val) {
-    if (val) {
-        const parts = val.split('|');
-        document.getElementById('hiddenArea').value = parts[0];
-        document.getElementById('hiddenCluster').value = parts[1];
-    } else {
-        document.getElementById('hiddenArea').value = '';
-        document.getElementById('hiddenCluster').value = '';
-    }
-}
-</script>
-
-<script>
-// Fungsi pembantu untuk memecah data AREA|CLUSTER ke hidden input
-function splitLocation(val) {
-    if (val) {
-        const parts = val.split('|');
-        document.getElementById('hiddenArea').value = parts[0];
-        document.getElementById('hiddenCluster').value = parts[1];
-    } else {
-        document.getElementById('hiddenArea').value = '';
-        document.getElementById('hiddenCluster').value = '';
-    }
-}
-</script>
-
-<script>
-// Fungsi untuk memecah string AREA|CLUSTER agar backend tetap menerima field 'area' dan 'cluster' secara terpisah
-function splitLocation(val) {
-    if (val) {
-        const parts = val.split('|');
-        document.getElementById('hiddenArea').value = parts[0];
-        document.getElementById('hiddenCluster').value = parts[1];
-    }
-}
-</script>
-    </div>
-</div>
 
 <div id="modalProcess" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-6">
     <div class="bg-white rounded-[40px] w-full max-w-5xl max-h-[90vh] overflow-hidden shadow-2xl flex flex-col">
@@ -1182,7 +1385,6 @@ function validateAndPreview(input, labelElement) {
         labelElement.classList.add('text-blue-600');
     }
 }
-
 </script>
 
 </body>
