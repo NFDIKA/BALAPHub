@@ -7,9 +7,12 @@
     "start": "node server.js"
   },
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "body-parser": "^1.20.2",
+    "dotenv": "^17.4.2",
     "ejs": "^3.1.10",
     "express": "^4.22.1",
+    "express-rate-limit": "^8.4.1",
     "express-session": "^1.19.0",
     "multer": "^2.1.1"
   },

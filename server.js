@@ -3,9 +3,18 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 const session = require("express-session");
+const bcrypt = require("bcrypt");
+const rateLimit = require("express-rate-limit");
+require("dotenv").config();
 
 const app = express();
 const port = 3000;
+
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 15,
+  message: "Terlalu banyak percobaan login, coba lagi nanti.",
+});
 
 // --- 1. MIDDLEWARE & CONFIGURATION ---
 app.use(express.json());
@@ -16,7 +25,7 @@ app.use("/uploads", express.static("uploads"));
 
 app.use(
   session({
-    secret: "balaphub-secret-key-2024",
+    secret: process.env.SESSION_SECRET || "fallback-secret",
     resave: false,
     saveUninitialized: false, // Diubah ke false untuk efisiensi session
     cookie: {
@@ -77,7 +86,7 @@ const readUsers = () => {
         {
           id: 1,
           username: "admin",
-          password: "adminpassword",
+          password: bcrypt.hashSync("adminpassword", 10),
           name: "Super Admin",
           role: "SuperAdmin",
         },
@@ -114,38 +123,42 @@ const upload = multer({
 });
 
 // --- 4. AUTH ROUTES ---
+
+const requireRole = (roles) => (req, res, next) => {
+  if (!req.session.user || !roles.includes(req.session.user.role)) {
+    return res.status(403).send("Akses Ditolak");
+  }
+  next();
+};
+
 app.get("/", (req, res) => {
   if (req.session.user) return res.redirect("/dashboard");
   res.render("login");
 });
 
-app.post("/login", (req, res) => {
+app.post("/login", loginLimiter, async (req, res) => {
   const { username, password, role } = req.body;
   const currentUsers = readUsers();
 
-  // Mencari user berdasarkan username, password, dan role
   const userFound = currentUsers.find(
-    (u) =>
-      u.username === username && u.password === password && u.role === role,
+    (u) => u.username === username && u.role === role,
   );
 
-  if (userFound) {
-    // Menyimpan seluruh data user (termasuk array clusters baru) ke session
+  if (userFound && (await bcrypt.compare(password, userFound.password))) {
     req.session.user = {
       id: userFound.id,
       name: userFound.name,
       username: userFound.username,
       role: userFound.role,
       mitraName: userFound.mitraName,
-      // Pastikan clusters terbawa, jika tidak ada set sebagai array kosong
       clusters: userFound.clusters || [],
     };
-    res.redirect("/dashboard");
-  } else {
-    res.send(
-      "<script>alert('Login Gagal! Periksa kembali Username, Password, atau Role Anda.'); window.location.href='/';</script>",
-    );
+    return res.redirect("/dashboard");
   }
+
+  res.send(
+    "<script>alert('Login Gagal! Periksa kembali Username, Password, atau Role Anda.'); window.location.href='/';</script>",
+  );
 });
 
 app.get("/logout", (req, res) => {
@@ -175,9 +188,13 @@ app.get("/dashboard", (req, res) => {
     psb: 0,
     cm: 0,
     pm: 0,
+    mutasi: 0,
+    dismantle: 0,
     nilaiPsb: 0,
     nilaiCm: 0,
     nilaiPm: 0,
+    nilaiMutasi: 0,
+    nilaiDismantle: 0,
   };
 
   // --- 1. LOGIKA FILTER DATA EKSISTING (SINKRON) ---
@@ -216,6 +233,12 @@ app.get("/dashboard", (req, res) => {
       pm: filteredData.filter((i) =>
         (i.jenisBalap || "").toUpperCase().includes("PM"),
       ).length,
+      mutasi: filteredData.filter((i) =>
+        (i.jenisBalap || "").toUpperCase().includes("MUTASI"),
+      ).length,
+      dismantle: filteredData.filter((i) =>
+        (i.jenisBalap || "").toUpperCase().includes("DISMANTLE"),
+      ).length,
       // Total Nilai Rupiah per Kategori
       nilaiPsb: filteredData
         .filter((i) => (i.jenisBalap || "").toUpperCase().includes("PSB"))
@@ -225,6 +248,12 @@ app.get("/dashboard", (req, res) => {
         .reduce((acc, curr) => acc + (Number(curr.nilai) || 0), 0),
       nilaiPm: filteredData
         .filter((i) => (i.jenisBalap || "").toUpperCase().includes("PM"))
+        .reduce((acc, curr) => acc + (Number(curr.nilai) || 0), 0),
+      nilaiMutasi: filteredData
+        .filter((i) => (i.jenisBalap || "").toUpperCase().includes("MUTASI"))
+        .reduce((acc, curr) => acc + (Number(curr.nilai) || 0), 0),
+      nilaiDismantle: filteredData
+        .filter((i) => (i.jenisBalap || "").toUpperCase().includes("DISMANTLE"))
         .reduce((acc, curr) => acc + (Number(curr.nilai) || 0), 0),
     };
   } else {
@@ -248,9 +277,13 @@ app.get("/dashboard", (req, res) => {
             psb: 0,
             cm: 0,
             pm: 0,
+            mutasi: 0,
+            dismantle: 0,
             nilaiPsb: 0,
             nilaiCm: 0,
             nilaiPm: 0,
+            nilaiMutasi: 0,
+            nilaiDismantle: 0,
           };
       };
 
@@ -271,6 +304,12 @@ app.get("/dashboard", (req, res) => {
         } else if (jenis.includes("PM")) {
           obj[key].pm += 1;
           obj[key].nilaiPm += nilai;
+        } else if (jenis.includes("MUTASI")) {
+          obj[key].mutasi += 1;
+          obj[key].nilaiMutasi += nilai;
+        } else if (jenis.includes("DISMANTLE")) {
+          obj[key].dismantle += 1;
+          obj[key].nilaiDismantle += nilai;
         }
       });
 
@@ -286,6 +325,12 @@ app.get("/dashboard", (req, res) => {
       } else if (jenis.includes("PM")) {
         totalKaa.pm += 1;
         totalKaa.nilaiPm += nilai;
+      } else if (jenis.includes("MUTASI")) {
+        totalKaa.mutasi += 1;
+        totalKaa.nilaiMutasi += nilai;
+      } else if (jenis.includes("DISMANTLE")) {
+        totalKaa.dismantle += 1;
+        totalKaa.nilaiDismantle += nilai;
       }
     });
 
@@ -312,7 +357,7 @@ app.get("/dashboard", (req, res) => {
   });
 });
 // Tambah User (DIPERBARUI: Menangani Multiple Clusters)
-app.post("/add-user", (req, res) => {
+app.post("/add-user", async (req, res) => {
   if (req.session.user.role !== "SuperAdmin")
     return res.status(403).send("Akses Ditolak");
 
@@ -329,11 +374,13 @@ app.post("/add-user", (req, res) => {
   let users = readUsers();
 
   // 3. Simpan data ke dalam database
+  const hashedPassword = await bcrypt.hash(password, 10);
+
   users.push({
     id: Date.now(),
     name,
     username,
-    password,
+    password: hashedPassword,
     email,
     role,
     mitraName: role === "Mitra" ? mitraName : null,
@@ -347,7 +394,7 @@ app.post("/add-user", (req, res) => {
   res.redirect("/dashboard");
 });
 
-app.post("/change-password", (req, res) => {
+app.post("/change-password", async (req, res) => {
   const { oldPassword, newPassword } = req.body;
   if (!req.session.user) return res.status(401).json({ success: false });
 
@@ -357,25 +404,24 @@ app.post("/change-password", (req, res) => {
   );
 
   if (userIndex !== -1) {
-    const passwordDiDB = users[userIndex].password.toString().trim();
-    const passwordInput = oldPassword.toString().trim();
+    const match = await bcrypt.compare(oldPassword, users[userIndex].password);
 
-    if (passwordDiDB === passwordInput) {
-      users[userIndex].password = newPassword.trim();
+    if (match) {
+      users[userIndex].password = await bcrypt.hash(newPassword, 10);
       writeUsers(users);
-      req.session.user.password = newPassword.trim();
       return res.json({
         success: true,
         message: "Password berhasil diperbarui!",
       });
     }
   }
+
   res
     .status(400)
     .json({ success: false, message: "Password lama tidak sesuai." });
 });
 
-app.post("/update-user/:username", (req, res) => {
+app.post("/update-user/:username", async (req, res) => {
   if (req.session.user.role !== "SuperAdmin")
     return res.status(403).json({ success: false });
   let users = readUsers();
@@ -383,7 +429,9 @@ app.post("/update-user/:username", (req, res) => {
   if (index !== -1) {
     users[index].name = req.body.name;
     users[index].role = req.body.role;
-    if (req.body.password) users[index].password = req.body.password;
+    if (req.body.password) {
+      users[index].password = await bcrypt.hash(req.body.password, 10);
+    }
     writeUsers(users);
     res.json({ success: true, message: "User updated" });
   } else {
@@ -402,32 +450,46 @@ app.post("/delete-user/:username", (req, res) => {
 // --- 6. OPERATIONAL ROUTES (PROJECTS) ---
 
 // Submit Pengajuan (DIPERBARUI: Auto-lock field Mitra)
-app.post("/submit-balap", upload.single("pdf_file"), (req, res) => {
+app.post("/submit-balap", upload.array("pdf_file", 20), (req, res) => {
   if (!req.session.user) return res.redirect("/");
   const data = readDB();
   const user = req.session.user;
+  const files = req.files;
 
-  const newItem = {
-    id: Date.now().toString(),
-    projectName: req.body.projectName,
-    // Mengunci data Mitra: Jika role Mitra gunakan data session, jika internal gunakan input 'INTERNAL'
-    mitraName: user.role === "Mitra" ? user.mitraName : "INTERNAL",
+  const toArray = (val) => (Array.isArray(val) ? val : [val]);
+  const projectNames = toArray(req.body.projectName);
+  const fullLocations = toArray(req.body.fullLocation);
+  const jenisBalaps = toArray(req.body.jenisBalap);
+  const nilais = toArray(req.body.nilai);
 
-    // Mengambil nilai dari hidden input area & cluster di modalTambah
-    area: req.body.area,
-    cluster: req.body.cluster,
+  projectNames.forEach((name, index) => {
+    if (!name) return;
 
-    jenisBalap: req.body.jenisBalap,
-    nilai: req.body.nilai,
-    pdfPath: req.file ? "/uploads/" + req.file.filename : null,
-    status: "WAITING_TEKNISI",
-    step: 1,
-    createdAt: new Date().toISOString(),
-    lastUpdate: new Date().toISOString(),
-    comments: [],
-  };
+    const loc = (fullLocations[index] || "").split("|");
+    const area = (loc[0] || "").trim();
+    const cluster = (loc[1] || "").trim();
 
-  data.push(newItem);
+    const newItem = {
+      // WAJIB STRING agar cocok dengan req.params.id di route approve
+      id: (Date.now() + index).toString(),
+      projectName: name,
+      mitraName: user.role === "Mitra" ? user.mitraName : "INTERNAL",
+      area: area,
+      cluster: cluster,
+      jenisBalap: jenisBalaps[index],
+      nilai: parseInt(nilais[index]) || 0,
+      status: "WAITING_TEKNISI", // Status awal alur
+      step: 1,
+      pdfPath:
+        files && files[index] ? "/uploads/" + files[index].filename : null,
+      comments: [], // Inisialisasi agar .push di route approve tidak error
+      createdAt: new Date().toISOString(),
+      lastUpdate: new Date().toISOString(),
+      submittedBy: user.username,
+    };
+    data.push(newItem);
+  });
+
   writeDB(data);
   res.redirect("/dashboard");
 });
@@ -440,7 +502,7 @@ app.post("/approve/:id", upload.single("pdf_file"), (req, res) => {
   // 2. Definisi variabel userRole agar tidak undefined
   const userRole = req.session.user.role;
   const data = readDB();
-  const item = data.find((d) => d.id === req.params.id);
+  const item = data.find((d) => d.id.toString() === req.params.id.toString());
 
   if (item) {
     // LOGIKA OVERWRITE: Jika ada file baru diupload saat approval
@@ -493,7 +555,7 @@ app.post("/reject/:id", (req, res) => {
 
   const userRole = req.session.user.role; // Konsisten dengan approve
   const data = readDB();
-  const item = data.find((d) => d.id === req.params.id);
+  const item = data.find((d) => d.id.toString() === req.params.id.toString());
 
   if (item) {
     item.status = "REJECTED";
@@ -515,7 +577,7 @@ app.post("/reject/:id", (req, res) => {
 app.post("/reupload/:id", upload.single("new_pdf"), (req, res) => {
   if (!req.session.user) return res.redirect("/");
   const data = readDB();
-  const item = data.find((d) => d.id === req.params.id);
+  const item = data.find((d) => d.id.toString() === req.params.id.toString());
 
   if (item && req.file) {
     // LOGIKA OVERWRITE: Hapus file lama yang di-reject
@@ -538,7 +600,7 @@ app.post("/reupload/:id", upload.single("new_pdf"), (req, res) => {
 });
 
 // Edit User (DIPERBARUI: Menangani Multiple Clusters)
-app.post("/edit-user", (req, res) => {
+app.post("/edit-user", async (req, res) => {
   if (req.session.user.role !== "SuperAdmin")
     return res.status(403).send("Akses Ditolak");
 
@@ -561,7 +623,7 @@ app.post("/edit-user", (req, res) => {
 
     // Hanya update password jika diisi
     if (password && password.trim() !== "") {
-      users[index].password = password;
+      users[index].password = await bcrypt.hash(password, 10);
     }
 
     writeUsers(users);
