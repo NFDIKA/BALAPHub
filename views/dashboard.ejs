@@ -57,114 +57,135 @@
             <% } %>
         </div>
 
-                <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-10">
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-10">
             <% if (user.role !== 'Mitra') { %>
+
+                <!-- ===================== PERINGKAT MITRA ===================== -->
                 <div class="bg-white p-7 rounded-[40px] border border-slate-100 shadow-sm flex flex-col">
                     <div class="flex items-center gap-3 mb-6">
-                        <div class="p-2 bg-amber-50 rounded-xl text-amber-500"><i data-lucide="award" class="w-5 h-5"></i></div>
+                        <div class="p-2 bg-amber-50 rounded-xl text-amber-500">
+                            <i data-lucide="award" class="w-5 h-5"></i>
+                        </div>
                         <h3 class="text-[11px] font-black uppercase tracking-widest text-slate-800 italic">Peringkat Mitra</h3>
                     </div>
-                    <div class="space-y-4 overflow-y-auto custom-scrollbar pr-1">
-                        <% rankingMitra.slice(0, 5).forEach((m, i) => { %>
-                            <div class="p-4 bg-slate-50 rounded-3xl border border-transparent hover:border-amber-200 transition-all mb-1">
-                                <div class="flex justify-between items-start mb-2">
-                                    <div class="flex items-center gap-2">
-                                        <span class="text-[10px] font-black <%= i === 0 ? 'text-amber-500' : 'text-slate-300' %>">#<%= i + 1 %></span>
-                                        <p class="text-[10px] font-black text-slate-800 uppercase tracking-tight"><%= m.name %></p>
-                                    </div>
-                                    <span class="text-[10px] font-black text-blue-600">Rp <%= m.totalNilai.toLocaleString('id-ID') %></span>
+
+                    <!-- TOP 3 -->
+                    <div class="space-y-4 mb-4">
+                        <% rankingMitra.slice(0, 3).forEach((m, i) => { %>
+                        <div class="p-4 bg-slate-50 rounded-3xl border border-transparent hover:border-amber-200 transition-all">
+                            <div class="flex justify-between items-start mb-2">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-[10px] font-black <%= i === 0 ? 'text-amber-500' : 'text-slate-300' %>">
+                                        #<%= i + 1 %>
+                                    </span>
+                                    <p class="text-[10px] font-black text-slate-800 uppercase"><%= m.name %></p>
                                 </div>
-                                <div class="grid grid-cols-3 gap-1 mb-2 border-b border-slate-200 pb-2">
-                                    <div class="text-[7px] font-bold text-blue-500 text-center uppercase">PSB: Rp <%= m.nilaiPsb.toLocaleString('id-ID') %></div>
-                                    <div class="text-[7px] font-bold text-orange-500 text-center uppercase">CM: Rp <%= m.nilaiCm.toLocaleString('id-ID') %></div>
-                                    <div class="text-[7px] font-bold text-purple-500 text-center uppercase">PM: Rp <%= m.nilaiPm.toLocaleString('id-ID') %></div>
-                                    <div class="text-[7px] font-bold text-green-500 text-center uppercase">Mutasi: Rp <%= m.nilaiMutasi.toLocaleString('id-ID') %></div>
-                                    <div class="text-[7px] font-bold text-red-500 text-center uppercase">Dismantle: Rp <%= m.nilaiDismantle.toLocaleString('id-ID') %></div>
-                                </div>
-                                <div class="grid grid-cols-4 gap-1 text-center">
-                                    <div>
-                                        <p class="text-[7px] font-bold text-slate-400 uppercase">Total</p>
-                                        <p class="text-[9px] font-black text-slate-700"><%= m.count %></p>
-                                    </div>
-                                    <div>
-                                        <p class="text-[7px] font-bold text-slate-400 uppercase">PSB</p>
-                                        <p class="text-[9px] font-black text-blue-500"><%= m.psb %></p>
-                                    </div>
-                                    <div>
-                                        <p class="text-[7px] font-bold text-slate-400 uppercase">CM</p>
-                                        <p class="text-[9px] font-black text-orange-500"><%= m.cm %></p>
-                                    </div>
-                                    <div>
-                                        <p class="text-[7px] font-bold text-slate-400 uppercase">PM</p>
-                                        <p class="text-[9px] font-black text-purple-500"><%= m.pm %></p>
-                                    </div>
-                                    <div>
-                                        <p class="text-[7px] font-bold text-slate-400 uppercase">Mutasi</p>
-                                        <p class="text-[9px] font-black text-green-500"><%= m.mutasi %></p>
-                                    </div>
-                                    <div>
-                                        <p class="text-[7px] font-bold text-slate-400 uppercase">Dismantle</p>
-                                        <p class="text-[9px] font-black text-red-500"><%= m.dismantle %></p>
-                                    </div>
-                                </div>
+                                <span class="text-[10px] font-black text-blue-600">
+                                    Rp <%= m.totalNilai.toLocaleString('id-ID') %>
+                                </span>
                             </div>
+
+                            <!-- DETAIL -->
+                            <div class="grid grid-cols-3 gap-1 mb-2 border-b border-slate-200 pb-2">
+                                <div class="text-[7px] font-bold text-blue-500 text-center uppercase">PSB: Rp <%= m.nilaiPsb.toLocaleString('id-ID') %></div>
+                                <div class="text-[7px] font-bold text-orange-500 text-center uppercase">CM: Rp <%= m.nilaiCm.toLocaleString('id-ID') %></div>
+                                <div class="text-[7px] font-bold text-purple-500 text-center uppercase">PM: Rp <%= m.nilaiPm.toLocaleString('id-ID') %></div>
+                                <div class="text-[7px] font-bold text-green-500 text-center uppercase">Mutasi: Rp <%= m.nilaiMutasi.toLocaleString('id-ID') %></div>
+                                <div class="text-[7px] font-bold text-red-500 text-center uppercase">Dismantle: Rp <%= m.nilaiDismantle.toLocaleString('id-ID') %></div>
+                            </div>
+
+                            <div class="grid grid-cols-4 gap-1 text-center">
+                                <div><p class="text-[7px] font-bold text-slate-400 uppercase">Total</p><p class="text-[9px] font-black text-slate-700"><%= m.count %></p></div>
+                                <div><p class="text-[7px] font-bold text-slate-400 uppercase">PSB</p><p class="text-[9px] font-black text-blue-500"><%= m.psb %></p></div>
+                                <div><p class="text-[7px] font-bold text-slate-400 uppercase">CM</p><p class="text-[9px] font-black text-orange-500"><%= m.cm %></p></div>
+                                <div><p class="text-[7px] font-bold text-slate-400 uppercase">PM</p><p class="text-[9px] font-black text-purple-500"><%= m.pm %></p></div>
+                                <div><p class="text-[7px] font-bold text-slate-400 uppercase">Mutasi</p><p class="text-[9px] font-black text-green-500"><%= m.mutasi %></p></div>
+                                <div><p class="text-[7px] font-bold text-slate-400 uppercase">Dismantle</p><p class="text-[9px] font-black text-red-500"><%= m.dismantle %></p></div>
+                            </div>
+                        </div>
+                        <% }) %>
+                    </div>
+
+                    <!-- SCROLL RANK 4+ -->
+                    <div class="space-y-4 overflow-y-auto custom-scrollbar pr-1 max-h-[320px]">
+                        <% rankingMitra.slice(3).forEach((m, i) => { %>
+                        <div class="p-4 bg-slate-50 rounded-3xl border border-transparent hover:border-amber-200 transition-all">
+                            <div class="flex justify-between items-start mb-2">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-[10px] font-black text-slate-400">#<%= i + 4 %></span>
+                                    <p class="text-[10px] font-black text-slate-800 uppercase"><%= m.name %></p>
+                                </div>
+                                <span class="text-[10px] font-black text-blue-600">
+                                    Rp <%= m.totalNilai.toLocaleString('id-ID') %>
+                                </span>
+                            </div>
+
+                            <!-- DETAIL SAMA -->
+                            <div class="grid grid-cols-3 gap-1 mb-2 border-b border-slate-200 pb-2">
+                                <div class="text-[7px] font-bold text-blue-500 text-center uppercase">PSB: Rp <%= m.nilaiPsb.toLocaleString('id-ID') %></div>
+                                <div class="text-[7px] font-bold text-orange-500 text-center uppercase">CM: Rp <%= m.nilaiCm.toLocaleString('id-ID') %></div>
+                                <div class="text-[7px] font-bold text-purple-500 text-center uppercase">PM: Rp <%= m.nilaiPm.toLocaleString('id-ID') %></div>
+                                <div class="text-[7px] font-bold text-green-500 text-center uppercase">Mutasi: Rp <%= m.nilaiMutasi.toLocaleString('id-ID') %></div>
+                                <div class="text-[7px] font-bold text-red-500 text-center uppercase">Dismantle: Rp <%= m.nilaiDismantle.toLocaleString('id-ID') %></div>
+                            </div>
+
+                            <div class="grid grid-cols-4 gap-1 text-center">
+                                <div><p class="text-[7px] font-bold text-slate-400 uppercase">Total</p><p class="text-[9px] font-black text-slate-700"><%= m.count %></p></div>
+                                <div><p class="text-[7px] font-bold text-slate-400 uppercase">PSB</p><p class="text-[9px] font-black text-blue-500"><%= m.psb %></p></div>
+                                <div><p class="text-[7px] font-bold text-slate-400 uppercase">CM</p><p class="text-[9px] font-black text-orange-500"><%= m.cm %></p></div>
+                                <div><p class="text-[7px] font-bold text-slate-400 uppercase">PM</p><p class="text-[9px] font-black text-purple-500"><%= m.pm %></p></div>
+                                <div><p class="text-[7px] font-bold text-slate-400 uppercase">Mutasi</p><p class="text-[9px] font-black text-green-500"><%= m.mutasi %></p></div>
+                                <div><p class="text-[7px] font-bold text-slate-400 uppercase">Dismantle</p><p class="text-[9px] font-black text-red-500"><%= m.dismantle %></p></div>
+                            </div>
+                        </div>
                         <% }) %>
                     </div>
                 </div>
 
+                <!-- ===================== TOP CLUSTER ===================== -->
                 <div class="bg-white p-7 rounded-[40px] border border-slate-100 shadow-sm flex flex-col">
                     <div class="flex items-center gap-3 mb-6">
-                        <div class="p-2 bg-blue-50 rounded-xl text-blue-500"><i data-lucide="map-pin" class="w-5 h-5"></i></div>
+                        <div class="p-2 bg-blue-50 rounded-xl text-blue-500">
+                            <i data-lucide="map-pin" class="w-5 h-5"></i>
+                        </div>
                         <h3 class="text-[11px] font-black uppercase tracking-widest text-slate-800 italic">Top Cluster</h3>
                     </div>
-                    <div class="space-y-4 overflow-y-auto custom-scrollbar pr-1">
-                        <% rankingCluster.slice(0, 5).forEach((c, i) => { %>
-                            <div class="p-4 bg-slate-50 rounded-3xl border border-transparent hover:border-blue-200 transition-all mb-1">
-                                <div class="flex justify-between items-start mb-2">
-                                    <p class="text-[10px] font-black text-slate-800 uppercase tracking-tight text-left"><%= c.name %></p>
-                                    <span class="text-[10px] font-black text-blue-600">Rp <%= c.totalNilai.toLocaleString('id-ID') %></span>
-                                </div>
-                                <div class="grid grid-cols-3 gap-1 mb-2 border-b border-slate-200 pb-2">
-                                    <div class="text-[7px] font-bold text-blue-500 text-center uppercase">PSB: Rp <%= c.nilaiPsb.toLocaleString('id-ID') %></div>
-                                    <div class="text-[7px] font-bold text-orange-500 text-center uppercase">CM: Rp <%= c.nilaiCm.toLocaleString('id-ID') %></div>
-                                    <div class="text-[7px] font-bold text-purple-500 text-center uppercase">PM: Rp <%= c.nilaiPm.toLocaleString('id-ID') %></div>
-                                    <div class="text-[7px] font-bold text-green-500 text-center uppercase">Mutasi: Rp <%= c.nilaiMutasi.toLocaleString('id-ID') %></div>
-                                    <div class="text-[7px] font-bold text-red-500 text-center uppercase">Dismantle: Rp <%= c.nilaiDismantle.toLocaleString('id-ID') %></div>
-                                </div>
-                                <div class="grid grid-cols-4 gap-1 text-center">
-                                    <div>
-                                        <p class="text-[7px] font-bold text-slate-400 uppercase">Total</p>
-                                        <p class="text-[9px] font-black text-slate-700"><%= c.count %></p>
-                                    </div>
-                                    <div>
-                                        <p class="text-[7px] font-bold text-slate-400 uppercase">PSB</p>
-                                        <p class="text-[9px] font-black text-blue-500"><%= c.psb %></p>
-                                    </div>
-                                    <div>
-                                        <p class="text-[7px] font-bold text-slate-400 uppercase">CM</p>
-                                        <p class="text-[9px] font-black text-orange-500"><%= c.cm %></p>
-                                    </div>
-                                    <div>
-                                        <p class="text-[7px] font-bold text-slate-400 uppercase">PM</p>
-                                        <p class="text-[9px] font-black text-purple-500"><%= c.pm %></p>
-                                    </div>
-                                    <div>
-                                        <p class="text-[7px] font-bold text-slate-400 uppercase">Mutasi</p>
-                                        <p class="text-[9px] font-black text-green-500"><%= c.mutasi %></p>
-                                    </div>
-                                    <div>
-                                        <p class="text-[7px] font-bold text-slate-400 uppercase">Dismantle</p>
-                                        <p class="text-[9px] font-black text-red-500"><%= c.dismantle %></p>
-                                    </div>
-                                </div>
+
+                    <!-- TOP 3 -->
+                    <div class="space-y-4 mb-4">
+                        <% rankingCluster.slice(0, 3).forEach((c, i) => { %>
+                        <div class="p-4 bg-slate-50 rounded-3xl border border-transparent hover:border-blue-200 transition-all">
+                            <div class="flex justify-between items-start mb-2">
+                                <p class="text-[10px] font-black text-slate-800 uppercase"><%= c.name %></p>
+                                <span class="text-[10px] font-black text-blue-600">Rp <%= c.totalNilai.toLocaleString('id-ID') %></span>
                             </div>
+                        </div>
+                        <% }) %>
+                    </div>
+
+                    <!-- SCROLL -->
+                    <div class="space-y-4 overflow-y-auto custom-scrollbar pr-1 max-h-[320px]">
+                        <% rankingCluster.slice(3).forEach((c, i) => { %>
+                        <div class="p-4 bg-slate-50 rounded-3xl border border-transparent hover:border-blue-200 transition-all">
+                            <div class="flex justify-between items-start mb-2">
+                                <p class="text-[10px] font-black text-slate-800 uppercase">
+                                    #<%= i + 4 %> <%= c.name %>
+                                </p>
+                                <span class="text-[10px] font-black text-blue-600">
+                                    Rp <%= c.totalNilai.toLocaleString('id-ID') %>
+                                </span>
+                            </div>
+                        </div>
                         <% }) %>
                     </div>
                 </div>
 
+                <!-- ===================== AREA (TIDAK DIUBAH) ===================== -->
                 <div class="bg-white p-7 rounded-[40px] border border-slate-100 shadow-sm flex flex-col">
                     <div class="flex items-center gap-3 mb-6">
-                        <div class="p-2 bg-emerald-50 rounded-xl text-emerald-500"><i data-lucide="pie-chart" class="w-5 h-5"></i></div>
+                        <div class="p-2 bg-emerald-50 rounded-xl text-emerald-500">
+                            <i data-lucide="pie-chart" class="w-5 h-5"></i>
+                        </div>
                         <h3 class="text-[11px] font-black uppercase tracking-widest text-slate-800 italic">Kontribusi Area</h3>
                     </div>
                     <div class="space-y-4 overflow-y-auto custom-scrollbar pr-1">
@@ -173,7 +194,7 @@
                                 <div class="flex justify-between items-start mb-2">
                                     <span class="text-[10px] font-black text-slate-800 uppercase tracking-tight"><%= a.name %></span>
                                     <span class="text-[10px] font-black text-emerald-600">Rp <%= a.totalNilai.toLocaleString('id-ID') %></span>
-                                </div>
+                                </div>  
                                 <div class="grid grid-cols-3 gap-1 mb-2 border-b border-slate-200 pb-2">
                                     <div class="text-[7px] font-bold text-blue-500 text-center uppercase">PSB: Rp <%= a.nilaiPsb.toLocaleString('id-ID') %></div>
                                     <div class="text-[7px] font-bold text-orange-500 text-center uppercase">CM: Rp <%= a.nilaiCm.toLocaleString('id-ID') %></div>
@@ -292,7 +313,7 @@
                     </div>
                 </div>
             <% } %>
-        </div>
+</div>
 
        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
             <button onclick="setQuickFilter('')" class="status-card bg-white p-6 rounded-[32px] border border-slate-200 shadow-sm text-left hover:border-blue-500 transition-all">
